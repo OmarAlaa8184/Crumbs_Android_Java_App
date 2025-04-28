@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Crumbs - فتافيت</string>
+    <string name="logoScreen">Logo Screen</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="slogan">\"Better meals leave no crumbs\"</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Log in</string>
+    <string name="forgotPassword">Forgot Password?</string>
+    <string name="or_continue_with">OR</string>
+    <string name="dont_have_account">Sign up?</string>
+    <string name="google_login">Google</string>
+    <string name="create_account">Create Your Account</string>
+    <string name="full_name">Full Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_up">Create Account</string>
+    <string name="already_have_account">Already Have Account?</string>
+    <string name="setNewPassword">Reset Password</string>
+    <string name="oldpassword">Current Password</string>
+    <string name="newpsaaord">New Password</string>
+    <string name="confirm_newpassword">Confirm New Password</string>
+    <string name="changepassowrd">Change Password</string>
+    <string name="sendEmail">Send Reset Email</string>
+    <string name="default_web_client_id">355781444689-30rm1to6di24i2ek4sjov1igft08jtpl.apps.googleusercontent.com</string>
+
+</resources>
