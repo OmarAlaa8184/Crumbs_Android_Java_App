@@ -30,6 +30,8 @@
         <activity android:name=".registerFeature.view.activitiesView.RegisterView"/>
         <activity android:name=".changeOldPasswordFeature.view.activitiesView.ChangeOldPasswordView"/>
         <activity android:name=".forgetPasswordFeature.view.activitiesView.ForgetPasswordView"/>
+        <activity android:name=".getRandomMeal.view.activitiesView.HomeView"/>
+        <activity android:name=".getRandomMeal.view.activitiesView.FavoriteView"/>
     </application>
 
 </manifest>
