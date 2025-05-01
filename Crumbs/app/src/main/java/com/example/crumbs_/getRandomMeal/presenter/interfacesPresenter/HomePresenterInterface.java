@@ -6,4 +6,6 @@ public interface HomePresenterInterface
 {
     public void getAllMeals();
     public void insertMeal(Meal meal);
+    public void deleteFromFav(Meal meal);
+
 }
