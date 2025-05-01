@@ -31,6 +31,12 @@ public class HomePresenter implements HomePresenterInterface, MealNetworkCallbac
     }
 
     @Override
+    public void deleteFromFav(Meal meal) {
+
+    }
+
+
+    @Override
     public void onSuccessResult(List<Meal> meals)
     {
         homeViewInterface.showData(meals);
