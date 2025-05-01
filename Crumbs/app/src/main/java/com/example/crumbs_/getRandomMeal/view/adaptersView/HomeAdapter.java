@@ -15,7 +15,8 @@ import com.bumptech.glide.Glide;
 import com.example.crumbs_.R;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.Meal;
 import com.example.crumbs_.getRandomMeal.view.listenersView.MealOnClickListener;
-
+import java.util.Set;
+import java.util.HashSet;
 import java.util.List;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>
@@ -26,6 +27,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>
     private Context context;
 
     private MealOnClickListener mealOnClickListener;
+
+    private Set<String> favoriteMealIds = new HashSet<>();
 
     public HomeAdapter(List<Meal> meals, Context context, MealOnClickListener mealOnClickListener) {
         this.meals = meals;
@@ -72,7 +75,35 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>
                 mealOnClickListener.onMealClick(meal);
             }
         });
+
+        boolean isFavorite = favoriteMealIds.contains(meal.getIdMeal());
+
+        viewHolder.favoriteButton.setImageResource(isFavorite ? R.drawable.ic_favorite_filled : R.drawable.ic_favorite_border);
+
+        viewHolder.favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+             boolean newFavoriteState = !favoriteMealIds.contains(meal.getIdMeal());
+
+            if (newFavoriteState)
+            {
+                favoriteMealIds.add(meal.getIdMeal());
+                viewHolder.favoriteButton.setImageResource(R.drawable.ic_favorite_filled);
+            }
+            else
+            {
+                favoriteMealIds.remove(meal.getIdMeal());
+                viewHolder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+            }
+
+            // Notify your database/presenter about the change
+            mealOnClickListener.onFavoriteClick(meal, newFavoriteState);
+        }
+
+      });
     }
+
 
     @Override
     public int getItemCount() {
@@ -88,7 +119,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>
     {
         ImageView mealImage;
         TextView mealName, mealCategory, mealArea;
-        ImageButton youtubeButton;
+        ImageButton youtubeButton,favoriteButton;
         public ViewHolder(@NonNull View itemView)
         {
             super(itemView);
@@ -97,6 +128,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>
             mealCategory = itemView.findViewById(R.id.mealCategory);
             mealArea = itemView.findViewById(R.id.mealArea);
             youtubeButton = itemView.findViewById(R.id.youtubeButton);
+            favoriteButton=itemView.findViewById(R.id.favoriteButton);
         }
     }
 }
