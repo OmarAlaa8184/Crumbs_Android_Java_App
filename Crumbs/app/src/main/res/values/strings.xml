@@ -22,5 +22,20 @@
     <string name="changepassowrd">Change Password</string>
     <string name="sendEmail">Send Reset Email</string>
     <string name="default_web_client_id">355781444689-30rm1to6di24i2ek4sjov1igft08jtpl.apps.googleusercontent.com</string>
-
+    <string name="app_logo">App Logo</string>
+    <string name="userEmail">User Email</string>
+    <string name="home">Home</string>
+    <string name="favorites">Favorites</string>
+    <string name="mealplanner">Meal Planner</string>
+    <string name="account">Account</string>
+    <string name="profile">Profile</string>
+    <string name="logout">Logout</string>
+    <string name="menu">Menu</string>
+    <string name="searchmeals">Search Meals</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="watch_on_youtube">Watch On Youtube</string>
+    <string name="mealImage">Meal Image</string>
+    <string name="search">Search</string>
+    <string name="calender">Calender</string>
 </resources>
