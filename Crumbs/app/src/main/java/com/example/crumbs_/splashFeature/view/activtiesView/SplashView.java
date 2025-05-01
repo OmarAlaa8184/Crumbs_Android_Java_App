@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.crumbs_.R;
+import com.example.crumbs_.getRandomMeal.view.activitiesView.HomeView;
 import com.example.crumbs_.loginFeature.view.activitiesView.LoginView;
 import com.example.crumbs_.registerFeature.view.activitiesView.RegisterView;
 import com.example.crumbs_.splashFeature.presenter.activitiesPresenter.SplashPresenter;
@@ -44,7 +45,7 @@ public class SplashView extends AppCompatActivity implements SplashViewInterface
     @Override
     public void goToHomeScreen()
     {
-        Intent intent = new Intent(SplashView.this, RegisterView.class); // or MainActivity
+        Intent intent = new Intent(SplashView.this, HomeView.class); // or MainActivity
         startActivity(intent);
         finish();
 
