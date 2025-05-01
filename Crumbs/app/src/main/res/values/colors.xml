@@ -4,4 +4,24 @@
     <color name="white">#FFFFFFFF</color>
     <color name="fireinlogo">#FD4637</color>
     <color name="slogen">#8F003E</color>
+
+    <!-- Cozy Color Palette -->
+    <color name="cozy_primary">#FF9E7B</color>  <!-- Soft peach -->
+    <color name="cozy_primary_dark">#E68A6F</color>
+    <color name="cozy_secondary">#A5C4D4</color> <!-- Dusty blue -->
+    <color name="cozy_secondary_dark">#8FB0C0</color>
+
+    <!-- Neutrals -->
+    <color name="cozy_background">#FFF8F5</color> <!-- Cream white -->
+    <color name="cozy_surface">#FFFFFF</color>
+    <color name="cozy_text">#5A4A42</color>     <!-- Warm gray -->
+
+    <!-- Special Colors -->
+    <color name="cozy_stroke">#33000000</color>  <!-- Very subtle border -->
+    <color name="cozy_ripple">#20FF9E7B</color> <!-- Primary color with 12% opacity -->
+
+    <!-- Bottom Navigation -->
+    <color name="bottom_nav_icon_active">@color/cozy_primary</color>
+    <color name="bottom_nav_icon_inactive">@color/slogen</color>
+
 </resources>
