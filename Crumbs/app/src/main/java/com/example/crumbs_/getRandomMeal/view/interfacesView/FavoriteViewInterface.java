@@ -1,10 +1,14 @@
 package com.example.crumbs_.getRandomMeal.view.interfacesView;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.crumbs_.getRandomMeal.model.mealPojo.Meal;
+
+import java.util.List;
 
 public interface FavoriteViewInterface
 {
 
-    public void deleteFavorite(Meal meal);
-    public void getFavorite();
+    public void showData(LiveData<List<Meal>> meals);
+    public void showError(String message);
 }
