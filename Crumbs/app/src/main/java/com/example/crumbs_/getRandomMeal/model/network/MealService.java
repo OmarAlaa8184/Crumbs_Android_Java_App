@@ -1,0 +1,12 @@
+package com.example.crumbs_.getRandomMeal.model.network;
+
+import com.example.crumbs_.getRandomMeal.model.mealPojo.MealResponse;
+
+import retrofit2.Call;
+import retrofit2.http.GET;
+
+public interface MealService
+{
+    @GET("random.php")
+    Call<MealResponse> getRandomMeal();
+}
