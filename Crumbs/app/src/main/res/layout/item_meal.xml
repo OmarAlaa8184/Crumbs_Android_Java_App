@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="30dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <!-- Meal Image -->
+        <ImageView
+            android:id="@+id/mealImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:contentDescription="@string/mealImage"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Meal Name -->
+        <TextView
+            android:id="@+id/mealName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/slogen"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/mealImage"
+            app:layout_constraintTop_toTopOf="@id/mealImage" />
+
+        <!-- Category -->
+        <TextView
+            android:id="@+id/mealCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/fireinlogo"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/mealName"
+            app:layout_constraintStart_toStartOf="@id/mealName"
+            app:layout_constraintTop_toBottomOf="@id/mealName" />
+
+        <!-- Area -->
+        <TextView
+            android:id="@+id/mealArea"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/fireinlogo"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/mealCategory"
+            app:layout_constraintStart_toStartOf="@id/mealCategory"
+            app:layout_constraintTop_toBottomOf="@id/mealCategory" />
+
+        <!-- YouTube Button -->
+        <ImageButton
+            android:id="@+id/youtubeButton"
+            android:layout_width="58dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/watch_on_youtube"
+            android:src="@drawable/ic_youtube"
+            app:layout_constraintEnd_toEndOf="@id/mealName"
+            app:layout_constraintTop_toBottomOf="@id/mealArea" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
