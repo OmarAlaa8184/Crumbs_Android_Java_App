@@ -6,4 +6,6 @@ public interface MealOnClickListener
 {
     void onMealClick(Meal meal);
     void onYoutubeClick(String youtubeUrl);
+    void onFavoriteClick(Meal meal, boolean isFavorite);
+
 }
