@@ -1,6 +1,7 @@
 package com.example.crumbs_.loginFeature.view.activitiesView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -96,6 +97,8 @@ public class LoginView extends AppCompatActivity implements LoginViewInterface
     {
         Toast.makeText(this, "LogIn Successful", Toast.LENGTH_SHORT).show();
         Intent intent=new Intent(LoginView.this, SplashView.class);
+        SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        prefs.edit().putString("EMAIL", emailEditText.getText().toString()).apply();
         startActivity(intent);
         finish();
     }
@@ -104,7 +107,6 @@ public class LoginView extends AppCompatActivity implements LoginViewInterface
     public void onLoginFailure(String message)
     {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-
     }
 
     @Override
@@ -112,6 +114,8 @@ public class LoginView extends AppCompatActivity implements LoginViewInterface
     {
         Toast.makeText(this, "Google Login Successful", Toast.LENGTH_SHORT).show();
         Intent intent=new Intent(LoginView.this,SplashView.class);
+        SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        prefs.edit().putString("EMAIL", emailEditText.getText().toString()).apply();
         startActivity(intent);
         finish();
     }
@@ -126,6 +130,7 @@ public class LoginView extends AppCompatActivity implements LoginViewInterface
     {
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode,  Intent data)

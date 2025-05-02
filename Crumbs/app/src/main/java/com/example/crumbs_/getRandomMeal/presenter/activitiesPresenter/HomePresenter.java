@@ -31,8 +31,9 @@ public class HomePresenter implements HomePresenterInterface, MealNetworkCallbac
     }
 
     @Override
-    public void deleteFromFav(Meal meal) {
-
+    public void deleteFromFav(Meal meal)
+    {
+        mealRepository.deleteMeal(meal);
     }
 
 

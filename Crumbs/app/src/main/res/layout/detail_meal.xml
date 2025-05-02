@@ -1,6 +1,109 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detailScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:padding="16dp"
+    android:background="@drawable/mainscreenbackground">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/detailLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="WebViewLayout"
+        android:padding="16dp"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        android:clipToOutline="true"
+        >
+
+        <!-- Meal Image -->
+        <ImageView
+            android:id="@+id/detailMealThumb"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/rounded_corners"
+            android:contentDescription="@string/mealImage"
+            android:scaleType="centerCrop" />
+
+        <!-- Meal Name -->
+        <TextView
+            android:id="@+id/detailMealName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:paddingTop="12dp"
+            android:textColor="@color/slogen"
+            android:fontFamily="@font/poppinsbold" />
+
+        <!-- Category and Area -->
+        <TextView
+            android:id="@+id/detailMealCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textColor="@color/fireinlogo"
+            android:paddingTop="4dp"
+            android:fontFamily="@font/poppinsregular" />
+
+        <TextView
+            android:id="@+id/detailMealArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textColor="@color/fireinlogo"
+            android:paddingBottom="12dp"
+            android:fontFamily="@font/poppinsregular" />
+
+        <!-- Instructions -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Instructions:"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:paddingTop="8dp"
+            android:textColor="@color/slogen"
+            android:fontFamily="@font/poppinsbold" />
+
+        <TextView
+            android:id="@+id/detailMealInstructions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:paddingBottom="12dp"
+            android:textColor="#444444"
+            android:fontFamily="@font/poppinsregular" />
+
+        <!-- YouTube Video -->
+        <WebView
+            android:id="@+id/youtubeWebView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/rounded_corners" />
+
+        <!-- Ingredients Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ingredients:"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:paddingTop="8dp"
+            android:textColor="@color/slogen"
+            android:fontFamily="@font/poppinsbold" />
+
+        <!-- Ingredients RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ingredientsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:nestedScrollingEnabled="false" />
+    </LinearLayout>
+</ScrollView>

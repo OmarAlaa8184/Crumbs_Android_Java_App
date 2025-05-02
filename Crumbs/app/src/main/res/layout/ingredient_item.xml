@@ -1,6 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_vertical"
+    android:background="@color/ic_launcher_background"
+    android:elevation="4dp"
+    android:layout_margin="8dp"
+    android:clipToOutline="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/ingredientImage"
+        android:layout_width="113dp"
+        android:layout_height="126dp"
+        android:contentDescription="@string/ingredient_image"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="8dp"
+
+        android:background="@drawable/rounded_corners" />
+
+    <TextView
+        android:id="@+id/ingredientText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@color/fireinlogo"
+        android:textSize="16sp"
+        android:fontFamily="@font/poppinsregular"
+        android:gravity="center" />
+</LinearLayout>
+
