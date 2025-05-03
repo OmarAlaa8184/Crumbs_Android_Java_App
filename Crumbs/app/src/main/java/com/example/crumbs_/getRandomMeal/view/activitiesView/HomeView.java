@@ -19,8 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crumbs_.R;
 import com.example.crumbs_.addToFavoriteFeature.view.activitiesView.FavoriteView;
+import com.example.crumbs_.getRandomMeal.model.mealPojo.Ingredient;
 import com.example.crumbs_.getRandomMeal.presenter.activitiesPresenter.MealCategoriesPresenter;
+import com.example.crumbs_.getRandomMeal.presenter.activitiesPresenter.MealIngredientPresenter;
 import com.example.crumbs_.getRandomMeal.view.adaptersView.MealCategoriesAdapter;
+import com.example.crumbs_.getRandomMeal.view.adaptersView.MealIngredientAdapter;
 import com.example.crumbs_.getRandomMeal.view.interfacesView.MealCategoriesViewInterface;
 import com.example.crumbs_.getMealDetailFeature.view.activitiesView.MealDetailView;
 import com.example.crumbs_.getRandomMeal.model.db.MealLocalDataSourceImpl;
@@ -31,6 +34,7 @@ import com.example.crumbs_.getRandomMeal.model.network.MealRemoteDataSourceImpl;
 import com.example.crumbs_.getRandomMeal.presenter.activitiesPresenter.HomePresenter;
 import com.example.crumbs_.getRandomMeal.view.adaptersView.HomeAdapter;
 import com.example.crumbs_.getRandomMeal.view.interfacesView.HomeViewInterface;
+import com.example.crumbs_.getRandomMeal.view.interfacesView.MealIngredientViewInterface;
 import com.example.crumbs_.getRandomMeal.view.listenersView.MealOnClickListener;
 import com.example.crumbs_.loginFeature.view.activitiesView.LoginView;
 import com.google.android.material.navigation.NavigationView;
@@ -39,7 +43,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeView extends AppCompatActivity implements HomeViewInterface, MealCategoriesViewInterface, MealOnClickListener
+public class HomeView extends AppCompatActivity implements HomeViewInterface, MealCategoriesViewInterface, MealOnClickListener, MealIngredientViewInterface
 {
 
     private DrawerLayout drawerLayout;
@@ -50,12 +54,18 @@ public class HomeView extends AppCompatActivity implements HomeViewInterface, Me
     private List<Meal> meals;
     private HomePresenter homePresenter;
 
-
+     /*Category*/
     private RecyclerView categoryRecyclerView;
     private MealCategoriesAdapter mealCategoriesAdapter;
     private MealCategoriesPresenter mealCategoriesPresenter;
     private ArrayList<Category> categories;
 
+    /*Ingredient*/
+
+    private RecyclerView ingredientRecyclerView;
+    private MealIngredientAdapter mealIngredientAdapter;
+    private MealIngredientPresenter mealIngredientPresenter;
+    private List<Ingredient> ingredients;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +77,9 @@ public class HomeView extends AppCompatActivity implements HomeViewInterface, Me
 
         categories=new ArrayList<>();
         mealCategoriesAdapter=new MealCategoriesAdapter(categories,this);
+
+        ingredients=new ArrayList<>();
+        mealIngredientAdapter=new MealIngredientAdapter(ingredients,this);
 
 
 
@@ -112,6 +125,20 @@ public class HomeView extends AppCompatActivity implements HomeViewInterface, Me
                 MealLocalDataSourceImpl.getInstance(this)),
                 this);
         mealCategoriesPresenter.getAllCategories();
+
+        /*Ingredient*/
+        ingredientRecyclerView=findViewById(R.id.ingredientRecyclerView);
+        LinearLayoutManager linearLayoutManagerIngredients=new LinearLayoutManager(this);
+        linearLayoutManagerIngredients.setOrientation(RecyclerView.HORIZONTAL);
+        ingredientRecyclerView.setLayoutManager(linearLayoutManagerIngredients);
+        ingredientRecyclerView.setHasFixedSize(true);
+
+        mealIngredientPresenter=new MealIngredientPresenter(MealRepositoryImp.getInstance(
+                MealRemoteDataSourceImpl.getInstance(),
+                MealLocalDataSourceImpl.getInstance(this)),this);
+        mealIngredientPresenter.getAllIngredients();
+
+
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
@@ -247,5 +274,19 @@ public class HomeView extends AppCompatActivity implements HomeViewInterface, Me
     {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
+    }
+
+    @Override
+    public void showIngredient(List<Ingredient> ingredients)
+    {
+        mealIngredientAdapter.setIngredients(ingredients);
+        ingredientRecyclerView.setAdapter(mealIngredientAdapter);
+
+    }
+
+    @Override
+    public void showIngredientError(String message)
+    {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
