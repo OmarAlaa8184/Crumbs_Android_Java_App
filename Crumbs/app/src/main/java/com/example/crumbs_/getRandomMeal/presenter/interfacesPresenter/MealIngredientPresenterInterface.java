@@ -1,4 +1,7 @@
-package com.example.crumbs_.getRandomMeal.presenter.activitiesPresenter;
+package com.example.crumbs_.getRandomMeal.presenter.interfacesPresenter;
 
-public interface MealIngredientPresenterInterface {
+public interface MealIngredientPresenterInterface
+{
+    void getAllIngredients();
+
 }
