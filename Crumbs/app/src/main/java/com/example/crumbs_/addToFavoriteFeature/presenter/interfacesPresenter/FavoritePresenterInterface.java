@@ -1,4 +1,4 @@
-package com.example.crumbs_.getRandomMeal.presenter.interfacesPresenter;
+package com.example.crumbs_.addToFavoriteFeature.presenter.interfacesPresenter;
 
 import com.example.crumbs_.getRandomMeal.model.mealPojo.Meal;
 

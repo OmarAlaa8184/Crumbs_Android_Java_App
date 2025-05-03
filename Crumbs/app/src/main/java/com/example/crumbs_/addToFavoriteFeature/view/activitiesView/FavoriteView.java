@@ -1,4 +1,4 @@
-package com.example.crumbs_.getRandomMeal.view.activitiesView;
+package com.example.crumbs_.addToFavoriteFeature.view.activitiesView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,20 +18,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crumbs_.R;
+import com.example.crumbs_.getMealDetailFeature.view.activitiesView.MealDetailView;
 import com.example.crumbs_.getRandomMeal.model.db.MealLocalDataSourceImpl;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.Meal;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.MealRepositoryImp;
 import com.example.crumbs_.getRandomMeal.model.network.MealRemoteDataSourceImpl;
-import com.example.crumbs_.getRandomMeal.presenter.activitiesPresenter.FavoritePresenter;
-import com.example.crumbs_.getRandomMeal.presenter.activitiesPresenter.HomePresenter;
-import com.example.crumbs_.getRandomMeal.view.adaptersView.FavoriteAdapter;
-import com.example.crumbs_.getRandomMeal.view.adaptersView.HomeAdapter;
-import com.example.crumbs_.getRandomMeal.view.interfacesView.FavoriteViewInterface;
+import com.example.crumbs_.addToFavoriteFeature.presenter.activitiesPresenter.FavoritePresenter;
+import com.example.crumbs_.getRandomMeal.view.activitiesView.HomeView;
+import com.example.crumbs_.addToFavoriteFeature.view.adaptersView.FavoriteAdapter;
+import com.example.crumbs_.addToFavoriteFeature.view.interfacesView.FavoriteViewInterface;
 import com.example.crumbs_.getRandomMeal.view.listenersView.MealOnClickListener;
 import com.example.crumbs_.loginFeature.view.activitiesView.LoginView;
-import com.example.crumbs_.splashFeature.view.activtiesView.SplashView;
 import com.google.android.material.navigation.NavigationView;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,7 +117,6 @@ public class FavoriteView extends AppCompatActivity implements FavoriteViewInter
                 finish();
             }
 
-
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
@@ -144,8 +143,42 @@ public class FavoriteView extends AppCompatActivity implements FavoriteViewInter
     }
 
     @Override
-    public void onMealClick(Meal meal) {
+    public void onMealClick(Meal meal)
+    {
+        Intent intent = new Intent(this, MealDetailView.class);
+        intent.putExtra("MEAL_NAME", meal.getStrMeal());
+        intent.putExtra("MEAL_CATEGORY", meal.getStrCategory());
+        intent.putExtra("MEAL_AREA", meal.getStrArea());
+        intent.putExtra("MEAL_INSTRUCTIONS", meal.getStrInstructions());
+        intent.putExtra("MEAL_THUMB", meal.getStrMealThumb());
+        intent.putExtra("MEAL_YOUTUBE", meal.getStrYoutube());
 
+        ArrayList<String> ingredients = new ArrayList<>();
+        for (int i = 1; i <= 20; i++) {
+            String ingredient = getValue(meal, "strIngredient" + i);
+            if (ingredient != null && !ingredient.trim().isEmpty()) {
+                String formatted =ingredient;
+                ingredients.add(formatted.trim());
+            }
+        }
+        intent.putStringArrayListExtra("MEAL_INGREDIENTS", ingredients);
+        startActivity(intent);
+
+    }
+    private String getValue(Meal meal, String fieldName) {
+        try {
+            Field field = meal.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            return (String) field.get(meal);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        navigationView.setCheckedItem(R.id.nav_favorites);
     }
 
     @Override
@@ -166,7 +199,7 @@ public class FavoriteView extends AppCompatActivity implements FavoriteViewInter
         }
         else
         {
-            // Add to favorites
+             // Add to favorites
             favoritePresenter.insertMeal(meal);
             Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show();
         }

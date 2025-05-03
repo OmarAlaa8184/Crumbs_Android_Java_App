@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -16,7 +18,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crumbs_.R;
+import com.example.crumbs_.addToFavoriteFeature.view.activitiesView.FavoriteView;
+import com.example.crumbs_.getRandomMeal.presenter.activitiesPresenter.MealCategoriesPresenter;
+import com.example.crumbs_.getRandomMeal.view.adaptersView.MealCategoriesAdapter;
+import com.example.crumbs_.getRandomMeal.view.interfacesView.MealCategoriesViewInterface;
+import com.example.crumbs_.getMealDetailFeature.view.activitiesView.MealDetailView;
 import com.example.crumbs_.getRandomMeal.model.db.MealLocalDataSourceImpl;
+import com.example.crumbs_.getRandomMeal.model.mealPojo.Category;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.Meal;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.MealRepositoryImp;
 import com.example.crumbs_.getRandomMeal.model.network.MealRemoteDataSourceImpl;
@@ -27,36 +35,56 @@ import com.example.crumbs_.getRandomMeal.view.listenersView.MealOnClickListener;
 import com.example.crumbs_.loginFeature.view.activitiesView.LoginView;
 import com.google.android.material.navigation.NavigationView;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeView extends AppCompatActivity implements HomeViewInterface, MealOnClickListener
+public class HomeView extends AppCompatActivity implements HomeViewInterface, MealCategoriesViewInterface, MealOnClickListener
 {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private RecyclerView recyclerView;
     private HomeAdapter homeAdapter;
-
     private static final String KEY_MEAL = "key_meal";
     private List<Meal> meals;
-
     private HomePresenter homePresenter;
+
+
+    private RecyclerView categoryRecyclerView;
+    private MealCategoriesAdapter mealCategoriesAdapter;
+    private MealCategoriesPresenter mealCategoriesPresenter;
+    private ArrayList<Category> categories;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainscreen);
+
         meals = new ArrayList<>();
         homeAdapter = new HomeAdapter(meals, this, this);
+
+        categories=new ArrayList<>();
+        mealCategoriesAdapter=new MealCategoriesAdapter(categories,this);
+
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         drawerLayout = findViewById(R.id.drawer_layout);
-
         navigationView = findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_home);
+
+        SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String userEmail = prefs.getString("EMAIL", "guest@example.com");
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView userEmailTextView = headerView.findViewById(R.id.userEmailTextView);
+        userEmailTextView.setText(userEmail);
+
+         /* Random MEAL  */
 
         recyclerView = findViewById(R.id.mealsRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -71,6 +99,19 @@ public class HomeView extends AppCompatActivity implements HomeViewInterface, Me
 
         homePresenter.getAllMeals();
 
+           /* Categories*/
+
+        categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
+        LinearLayoutManager linearLayoutManagerCategories = new LinearLayoutManager(this);
+        linearLayoutManagerCategories.setOrientation(RecyclerView.HORIZONTAL);
+        categoryRecyclerView.setLayoutManager(linearLayoutManagerCategories);
+        categoryRecyclerView.setHasFixedSize(true);
+
+        mealCategoriesPresenter=new MealCategoriesPresenter(MealRepositoryImp.getInstance(
+                MealRemoteDataSourceImpl.getInstance(),
+                MealLocalDataSourceImpl.getInstance(this)),
+                this);
+        mealCategoriesPresenter.getAllCategories();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
@@ -79,6 +120,7 @@ public class HomeView extends AppCompatActivity implements HomeViewInterface, Me
 
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
 
@@ -109,14 +151,18 @@ public class HomeView extends AppCompatActivity implements HomeViewInterface, Me
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
-
             }
 
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
+    }
 
-
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        navigationView.setCheckedItem(R.id.nav_home);
     }
 
     @Override
@@ -125,17 +171,42 @@ public class HomeView extends AppCompatActivity implements HomeViewInterface, Me
         homeAdapter.setMeals(meals);
         recyclerView.setAdapter(homeAdapter);
     }
-
     @Override
     public void showError(String message)
     {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
-
     @Override
     public void onMealClick(Meal meal)
     {
+        Intent intent = new Intent(this, MealDetailView.class);
+        intent.putExtra("MEAL_NAME", meal.getStrMeal());
+        intent.putExtra("MEAL_CATEGORY", meal.getStrCategory());
+        intent.putExtra("MEAL_AREA", meal.getStrArea());
+        intent.putExtra("MEAL_INSTRUCTIONS", meal.getStrInstructions());
+        intent.putExtra("MEAL_THUMB", meal.getStrMealThumb());
+        intent.putExtra("MEAL_YOUTUBE", meal.getStrYoutube());
 
+        ArrayList<String> ingredients = new ArrayList<>();
+        for (int i = 1; i <= 20; i++) {
+            String ingredient = getValue(meal, "strIngredient" + i);
+            if (ingredient != null && !ingredient.trim().isEmpty()) {
+                String formatted =ingredient;
+                ingredients.add(formatted.trim());
+            }
+        }
+        intent.putStringArrayListExtra("MEAL_INGREDIENTS", ingredients);
+
+        startActivity(intent);
+    }
+    private String getValue(Meal meal, String fieldName) {
+        try {
+            Field field = meal.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            return (String) field.get(meal);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
@@ -160,6 +231,21 @@ public class HomeView extends AppCompatActivity implements HomeViewInterface, Me
             homePresenter.deleteFromFav(meal);
             Toast.makeText(this, "Removed from favorites", Toast.LENGTH_SHORT).show();
         }
+
+    }
+
+    @Override
+    public void showCategories(List<Category> categories)
+    {
+        mealCategoriesAdapter.setCategories(categories);
+        categoryRecyclerView.setAdapter(mealCategoriesAdapter);
+
+    }
+
+    @Override
+    public void showCategoriesError(String message)
+    {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
     }
 }

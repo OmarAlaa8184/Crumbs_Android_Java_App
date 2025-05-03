@@ -1,4 +1,4 @@
-package com.example.crumbs_.getRandomMeal.view.interfacesView;
+package com.example.crumbs_.addToFavoriteFeature.view.interfacesView;
 
 import androidx.lifecycle.LiveData;
 

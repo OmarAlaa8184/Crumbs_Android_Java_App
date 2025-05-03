@@ -1,11 +1,11 @@
-package com.example.crumbs_.getRandomMeal.presenter.activitiesPresenter;
+package com.example.crumbs_.addToFavoriteFeature.presenter.activitiesPresenter;
 
 import androidx.lifecycle.LiveData;
 
 import com.example.crumbs_.getRandomMeal.model.mealPojo.Meal;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.MealRepository;
-import com.example.crumbs_.getRandomMeal.presenter.interfacesPresenter.FavoritePresenterInterface;
-import com.example.crumbs_.getRandomMeal.view.interfacesView.FavoriteViewInterface;
+import com.example.crumbs_.addToFavoriteFeature.presenter.interfacesPresenter.FavoritePresenterInterface;
+import com.example.crumbs_.addToFavoriteFeature.view.interfacesView.FavoriteViewInterface;
 
 import java.util.List;
 

@@ -1,5 +1,6 @@
 package com.example.crumbs_.getRandomMeal.model.network;
 
+import com.example.crumbs_.getRandomMeal.model.mealPojo.CategoryResponse;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.MealResponse;
 
 import retrofit2.Call;
@@ -56,6 +57,33 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource
             public void onFailure(Call<MealResponse> call, Throwable t)
             {
                mealNetworkCallback.onFailureResult(t.getMessage());
+            }
+        });
+
+    }
+
+    @Override
+    public void makeCategoryNetworkCall(CategoryNetworkCallback categoryNetworkCallback)
+    {
+        mealService.getCategories().enqueue(new Callback<CategoryResponse>() {
+            @Override
+            public void onResponse(Call<CategoryResponse> call, Response<CategoryResponse> response)
+            {
+                if (response.isSuccessful())
+                {
+                    categoryNetworkCallback.onSuccessResult(response.body().getCategories());
+                }
+                else
+                {
+                    categoryNetworkCallback.onFailureResult(response.message());
+                }
+
+            }
+            @Override
+            public void onFailure(Call<CategoryResponse> call, Throwable t)
+            {
+                categoryNetworkCallback.onFailureResult(t.getMessage());
+
             }
         });
 

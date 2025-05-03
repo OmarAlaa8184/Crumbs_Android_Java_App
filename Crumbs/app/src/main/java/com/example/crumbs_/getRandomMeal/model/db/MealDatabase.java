@@ -14,6 +14,7 @@ public abstract class MealDatabase extends RoomDatabase
     private static MealDatabase mealDatabase=null;
 
     public abstract MealDAO getMealDAO();
+
     public static MealDatabase getInstance(Context context)
     {
         if (mealDatabase==null)

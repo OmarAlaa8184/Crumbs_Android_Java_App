@@ -1,4 +1,4 @@
-package com.example.crumbs_.getRandomMeal.view.adaptersView;
+package com.example.crumbs_.addToFavoriteFeature.view.adaptersView;
 
 import android.content.Context;
 import android.view.LayoutInflater;
