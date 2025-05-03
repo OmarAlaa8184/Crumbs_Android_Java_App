@@ -6,6 +6,7 @@ public interface MealRemoteDataSource
 
     void makeCategoryNetworkCall(CategoryNetworkCallback categoryNetworkCallback);
 
+    void makeIngredientNetworkCall(IngredientNetworkCallback ingredientNetworkCallback);
 
 
 }

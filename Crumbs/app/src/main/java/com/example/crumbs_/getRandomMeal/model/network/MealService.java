@@ -1,6 +1,7 @@
 package com.example.crumbs_.getRandomMeal.model.network;
 
 import com.example.crumbs_.getRandomMeal.model.mealPojo.CategoryResponse;
+import com.example.crumbs_.getRandomMeal.model.mealPojo.IngredientResponse;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.MealResponse;
 
 import retrofit2.Call;
@@ -13,4 +14,8 @@ public interface MealService
 
     @GET("categories.php")
     Call<CategoryResponse> getCategories();
+
+    @GET("list.php?i=list")
+    Call<IngredientResponse> getAllIngredients();
+
 }
