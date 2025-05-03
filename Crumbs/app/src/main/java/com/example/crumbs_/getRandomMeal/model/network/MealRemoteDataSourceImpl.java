@@ -1,5 +1,6 @@
 package com.example.crumbs_.getRandomMeal.model.network;
 
+import com.example.crumbs_.getRandomMeal.model.mealPojo.AreaResponse;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.CategoryResponse;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.IngredientResponse;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.MealResponse;
@@ -115,5 +116,32 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource
             }
         });
 
+    }
+
+    @Override
+    public void makeAreaNetworkCallback(AreaNetworkCallback areaNetworkCallback)
+    {
+
+        mealService.getAllAreas().enqueue(new Callback<AreaResponse>() {
+            @Override
+            public void onResponse(Call<AreaResponse> call, Response<AreaResponse> response)
+            {
+                if (response.isSuccessful())
+                {
+                    areaNetworkCallback.onSuccessResult(response.body().getAreas());
+                }
+                else
+                {
+                    areaNetworkCallback.onFailureResult(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AreaResponse> call, Throwable t)
+            {
+                areaNetworkCallback.onFailureResult(t.getMessage());
+
+            }
+        });
     }
 }

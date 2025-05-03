@@ -1,5 +1,6 @@
 package com.example.crumbs_.getRandomMeal.view.activitiesView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -19,11 +20,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crumbs_.R;
 import com.example.crumbs_.addToFavoriteFeature.view.activitiesView.FavoriteView;
+import com.example.crumbs_.getRandomMeal.model.mealPojo.Area;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.Ingredient;
+import com.example.crumbs_.getRandomMeal.presenter.activitiesPresenter.MealAreaPresenter;
 import com.example.crumbs_.getRandomMeal.presenter.activitiesPresenter.MealCategoriesPresenter;
 import com.example.crumbs_.getRandomMeal.presenter.activitiesPresenter.MealIngredientPresenter;
+import com.example.crumbs_.getRandomMeal.view.adaptersView.MealAreaAdaptor;
 import com.example.crumbs_.getRandomMeal.view.adaptersView.MealCategoriesAdapter;
 import com.example.crumbs_.getRandomMeal.view.adaptersView.MealIngredientAdapter;
+import com.example.crumbs_.getRandomMeal.view.interfacesView.MealAreaViewInterface;
 import com.example.crumbs_.getRandomMeal.view.interfacesView.MealCategoriesViewInterface;
 import com.example.crumbs_.getMealDetailFeature.view.activitiesView.MealDetailView;
 import com.example.crumbs_.getRandomMeal.model.db.MealLocalDataSourceImpl;
@@ -43,7 +48,10 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeView extends AppCompatActivity implements HomeViewInterface, MealCategoriesViewInterface, MealOnClickListener, MealIngredientViewInterface
+public class HomeView extends AppCompatActivity implements
+                                                           HomeViewInterface,
+        MealCategoriesViewInterface, MealOnClickListener,
+        MealIngredientViewInterface, MealAreaViewInterface
 {
 
     private DrawerLayout drawerLayout;
@@ -55,6 +63,7 @@ public class HomeView extends AppCompatActivity implements HomeViewInterface, Me
     private HomePresenter homePresenter;
 
      /*Category*/
+
     private RecyclerView categoryRecyclerView;
     private MealCategoriesAdapter mealCategoriesAdapter;
     private MealCategoriesPresenter mealCategoriesPresenter;
@@ -67,6 +76,13 @@ public class HomeView extends AppCompatActivity implements HomeViewInterface, Me
     private MealIngredientPresenter mealIngredientPresenter;
     private List<Ingredient> ingredients;
 
+    /*Areas*/
+    private RecyclerView areaRecyclerView;
+    private MealAreaAdaptor mealAreaAdaptor;
+    private MealAreaPresenter mealAreaPresenter;
+    private List<Area> areas;
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +97,8 @@ public class HomeView extends AppCompatActivity implements HomeViewInterface, Me
         ingredients=new ArrayList<>();
         mealIngredientAdapter=new MealIngredientAdapter(ingredients,this);
 
+        areas=new ArrayList<>();
+        mealAreaAdaptor=new MealAreaAdaptor(areas,this);
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -126,7 +144,8 @@ public class HomeView extends AppCompatActivity implements HomeViewInterface, Me
                 this);
         mealCategoriesPresenter.getAllCategories();
 
-        /*Ingredient*/
+            /*Ingredient*/
+
         ingredientRecyclerView=findViewById(R.id.ingredientRecyclerView);
         LinearLayoutManager linearLayoutManagerIngredients=new LinearLayoutManager(this);
         linearLayoutManagerIngredients.setOrientation(RecyclerView.HORIZONTAL);
@@ -137,6 +156,20 @@ public class HomeView extends AppCompatActivity implements HomeViewInterface, Me
                 MealRemoteDataSourceImpl.getInstance(),
                 MealLocalDataSourceImpl.getInstance(this)),this);
         mealIngredientPresenter.getAllIngredients();
+
+        /*Area*/
+
+
+        areaRecyclerView=findViewById(R.id.areaRecyclerView);
+        LinearLayoutManager linearLayoutManagerAreas=new LinearLayoutManager(this);
+        linearLayoutManagerAreas.setOrientation(RecyclerView.HORIZONTAL);
+        areaRecyclerView.setLayoutManager(linearLayoutManagerAreas);
+        areaRecyclerView.setHasFixedSize(true);
+
+        mealAreaPresenter=new MealAreaPresenter(MealRepositoryImp.getInstance(
+                MealRemoteDataSourceImpl.getInstance(),
+                MealLocalDataSourceImpl.getInstance(this)),this);
+        mealAreaPresenter.getAllAreas();
 
 
 
@@ -288,5 +321,19 @@ public class HomeView extends AppCompatActivity implements HomeViewInterface, Me
     public void showIngredientError(String message)
     {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showArea(List<Area> areas)
+    {
+        mealAreaAdaptor.setAreas(areas);
+        areaRecyclerView.setAdapter(mealAreaAdaptor);
+    }
+
+    @Override
+    public void showAreError(String message)
+    {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
     }
 }

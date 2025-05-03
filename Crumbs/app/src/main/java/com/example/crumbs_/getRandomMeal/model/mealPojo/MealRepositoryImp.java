@@ -3,6 +3,7 @@ package com.example.crumbs_.getRandomMeal.model.mealPojo;
 import androidx.lifecycle.LiveData;
 
 import com.example.crumbs_.getRandomMeal.model.db.MealLocalDataSource;
+import com.example.crumbs_.getRandomMeal.model.network.AreaNetworkCallback;
 import com.example.crumbs_.getRandomMeal.model.network.CategoryNetworkCallback;
 import com.example.crumbs_.getRandomMeal.model.network.IngredientNetworkCallback;
 import com.example.crumbs_.getRandomMeal.model.network.MealNetworkCallback;
@@ -50,6 +51,13 @@ public class MealRepositoryImp implements MealRepository
     public void getAllIngredients(IngredientNetworkCallback ingredientNetworkCallback)
     {
           mealRemoteDataSource.makeIngredientNetworkCall(ingredientNetworkCallback);
+    }
+
+    @Override
+    public void getAllAreas(AreaNetworkCallback areaNetworkCallback)
+    {
+        mealRemoteDataSource.makeAreaNetworkCallback(areaNetworkCallback);
+
     }
 
     @Override

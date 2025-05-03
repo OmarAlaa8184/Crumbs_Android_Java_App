@@ -1,5 +1,6 @@
 package com.example.crumbs_.getRandomMeal.model.network;
 
+import com.example.crumbs_.getRandomMeal.model.mealPojo.AreaResponse;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.CategoryResponse;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.IngredientResponse;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.MealResponse;
@@ -17,5 +18,8 @@ public interface MealService
 
     @GET("list.php?i=list")
     Call<IngredientResponse> getAllIngredients();
+
+    @GET("list.php?a=list")
+    Call<AreaResponse> getAllAreas();
 
 }

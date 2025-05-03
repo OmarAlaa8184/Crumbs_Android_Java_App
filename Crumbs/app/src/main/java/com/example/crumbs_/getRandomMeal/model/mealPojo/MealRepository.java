@@ -2,6 +2,7 @@ package com.example.crumbs_.getRandomMeal.model.mealPojo;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.crumbs_.getRandomMeal.model.network.AreaNetworkCallback;
 import com.example.crumbs_.getRandomMeal.model.network.CategoryNetworkCallback;
 import com.example.crumbs_.getRandomMeal.model.network.IngredientNetworkCallback;
 import com.example.crumbs_.getRandomMeal.model.network.MealNetworkCallback;
@@ -16,6 +17,9 @@ public interface MealRepository
     public void getAllCategories(CategoryNetworkCallback categoryNetworkCallback);
 
     public  void getAllIngredients(IngredientNetworkCallback ingredientNetworkCallback);
+
+    public  void getAllAreas(AreaNetworkCallback areaNetworkCallback);
+
 
     public void insertMeal(Meal meal);
 
