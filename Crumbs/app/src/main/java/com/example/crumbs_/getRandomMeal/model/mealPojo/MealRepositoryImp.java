@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.crumbs_.getRandomMeal.model.db.MealLocalDataSource;
 import com.example.crumbs_.getRandomMeal.model.network.CategoryNetworkCallback;
+import com.example.crumbs_.getRandomMeal.model.network.IngredientNetworkCallback;
 import com.example.crumbs_.getRandomMeal.model.network.MealNetworkCallback;
 import com.example.crumbs_.getRandomMeal.model.network.MealRemoteDataSource;
 
@@ -43,6 +44,12 @@ public class MealRepositoryImp implements MealRepository
     public void getAllCategories(CategoryNetworkCallback categoryNetworkCallback)
     {
             mealRemoteDataSource.makeCategoryNetworkCall(categoryNetworkCallback);
+    }
+
+    @Override
+    public void getAllIngredients(IngredientNetworkCallback ingredientNetworkCallback)
+    {
+          mealRemoteDataSource.makeIngredientNetworkCall(ingredientNetworkCallback);
     }
 
     @Override
