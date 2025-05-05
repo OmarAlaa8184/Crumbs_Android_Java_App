@@ -144,4 +144,104 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource
             }
         });
     }
+
+    @Override
+    public void makeSearchMealsNetworkCallback(String query, SearchNetworkCallback searchNetworkCallback)
+    {
+        mealService.searchMeals(query).enqueue(new Callback<MealResponse>() {
+            @Override
+            public void onResponse(Call<MealResponse> call, Response<MealResponse> response) {
+                if (response.isSuccessful())
+                {
+                    searchNetworkCallback.onSuccessSearchResult(response.body().getMeals());
+                }
+                else
+                {
+                    searchNetworkCallback.onFailureSearchResult(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MealResponse> call, Throwable t)
+            {
+                searchNetworkCallback.onFailureSearchResult(t.getMessage());
+
+            }
+        });
+    }
+
+    @Override
+    public void makeFilterByIngredientNetworkCallback(String ingredient, SearchNetworkCallback searchNetworkCallback)
+    {
+        mealService.filterByIngredient(ingredient).enqueue(new Callback<MealResponse>() {
+            @Override
+            public void onResponse(Call<MealResponse> call, Response<MealResponse> response) {
+                if (response.isSuccessful())
+                {
+                    searchNetworkCallback.onSuccessSearchResult(response.body().getMeals());
+                }
+                else
+                {
+                    searchNetworkCallback.onFailureSearchResult(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MealResponse> call, Throwable t)
+            {
+                searchNetworkCallback.onFailureSearchResult(t.getMessage());
+
+            }
+        });
+    }
+
+    @Override
+    public void makeFilterByAreaNetworkCallback(String area, SearchNetworkCallback searchNetworkCallback)
+    {
+        mealService.filterByArea(area).enqueue(new Callback<MealResponse>() {
+            @Override
+            public void onResponse(Call<MealResponse> call, Response<MealResponse> response) {
+                if (response.isSuccessful())
+                {
+                    searchNetworkCallback.onSuccessSearchResult(response.body().getMeals());
+                }
+                else
+                {
+                    searchNetworkCallback.onFailureSearchResult(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MealResponse> call, Throwable t)
+            {
+                searchNetworkCallback.onFailureSearchResult(t.getMessage());
+
+            }
+        });
+    }
+
+    @Override
+    public void makeFilterByCategoryNetworkCallback(String category, SearchNetworkCallback searchNetworkCallback)
+    {
+        mealService.filterByCategory(category).enqueue(new Callback<MealResponse>() {
+            @Override
+            public void onResponse(Call<MealResponse> call, Response<MealResponse> response) {
+                if (response.isSuccessful())
+                {
+                    searchNetworkCallback.onSuccessSearchResult(response.body().getMeals());
+                }
+                else
+                {
+                    searchNetworkCallback.onFailureSearchResult(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MealResponse> call, Throwable t)
+            {
+                searchNetworkCallback.onFailureSearchResult(t.getMessage());
+
+            }
+        });
+    }
 }

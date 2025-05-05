@@ -1,9 +1,15 @@
 package com.example.crumbs_.getRandomMeal.view.activitiesView;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -18,6 +24,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.crumbs_.R;
 import com.example.crumbs_.addToFavoriteFeature.view.activitiesView.FavoriteView;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.Area;
@@ -42,6 +49,7 @@ import com.example.crumbs_.getRandomMeal.view.interfacesView.HomeViewInterface;
 import com.example.crumbs_.getRandomMeal.view.interfacesView.MealIngredientViewInterface;
 import com.example.crumbs_.getRandomMeal.view.listenersView.MealOnClickListener;
 import com.example.crumbs_.loginFeature.view.activitiesView.LoginView;
+import com.example.crumbs_.searchFeature.view.activitiesView.SearchViewActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import java.lang.reflect.Field;
@@ -61,6 +69,7 @@ public class HomeView extends AppCompatActivity implements
     private static final String KEY_MEAL = "key_meal";
     private List<Meal> meals;
     private HomePresenter homePresenter;
+    Context context;
 
      /*Category*/
 
@@ -82,7 +91,8 @@ public class HomeView extends AppCompatActivity implements
     private MealAreaPresenter mealAreaPresenter;
     private List<Area> areas;
 
-    @SuppressLint("MissingInflatedId")
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,14 +101,14 @@ public class HomeView extends AppCompatActivity implements
         meals = new ArrayList<>();
         homeAdapter = new HomeAdapter(meals, this, this);
 
-        categories=new ArrayList<>();
-        mealCategoriesAdapter=new MealCategoriesAdapter(categories,this);
+        categories = new ArrayList<>();
+        mealCategoriesAdapter = new MealCategoriesAdapter(categories, this);
 
-        ingredients=new ArrayList<>();
-        mealIngredientAdapter=new MealIngredientAdapter(ingredients,this);
+        ingredients = new ArrayList<>();
+        mealIngredientAdapter = new MealIngredientAdapter(ingredients, this);
 
-        areas=new ArrayList<>();
-        mealAreaAdaptor=new MealAreaAdaptor(areas,this);
+        areas = new ArrayList<>();
+        mealAreaAdaptor = new MealAreaAdaptor(areas, this);
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -115,7 +125,7 @@ public class HomeView extends AppCompatActivity implements
         TextView userEmailTextView = headerView.findViewById(R.id.userEmailTextView);
         userEmailTextView.setText(userEmail);
 
-         /* Random MEAL  */
+        /* Random MEAL  */
 
         recyclerView = findViewById(R.id.mealsRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -130,7 +140,7 @@ public class HomeView extends AppCompatActivity implements
 
         homePresenter.getAllMeals();
 
-           /* Categories*/
+        /* Categories*/
 
         categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
         LinearLayoutManager linearLayoutManagerCategories = new LinearLayoutManager(this);
@@ -138,39 +148,38 @@ public class HomeView extends AppCompatActivity implements
         categoryRecyclerView.setLayoutManager(linearLayoutManagerCategories);
         categoryRecyclerView.setHasFixedSize(true);
 
-        mealCategoriesPresenter=new MealCategoriesPresenter(MealRepositoryImp.getInstance(
+        mealCategoriesPresenter = new MealCategoriesPresenter(MealRepositoryImp.getInstance(
                 MealRemoteDataSourceImpl.getInstance(),
                 MealLocalDataSourceImpl.getInstance(this)),
                 this);
         mealCategoriesPresenter.getAllCategories();
 
-            /*Ingredient*/
+        /*Ingredient*/
 
-        ingredientRecyclerView=findViewById(R.id.ingredientRecyclerView);
-        LinearLayoutManager linearLayoutManagerIngredients=new LinearLayoutManager(this);
+        ingredientRecyclerView = findViewById(R.id.ingredientRecyclerView);
+        LinearLayoutManager linearLayoutManagerIngredients = new LinearLayoutManager(this);
         linearLayoutManagerIngredients.setOrientation(RecyclerView.HORIZONTAL);
         ingredientRecyclerView.setLayoutManager(linearLayoutManagerIngredients);
         ingredientRecyclerView.setHasFixedSize(true);
 
-        mealIngredientPresenter=new MealIngredientPresenter(MealRepositoryImp.getInstance(
+        mealIngredientPresenter = new MealIngredientPresenter(MealRepositoryImp.getInstance(
                 MealRemoteDataSourceImpl.getInstance(),
-                MealLocalDataSourceImpl.getInstance(this)),this);
+                MealLocalDataSourceImpl.getInstance(this)), this);
         mealIngredientPresenter.getAllIngredients();
 
         /*Area*/
 
 
-        areaRecyclerView=findViewById(R.id.areaRecyclerView);
-        LinearLayoutManager linearLayoutManagerAreas=new LinearLayoutManager(this);
+        areaRecyclerView = findViewById(R.id.areaRecyclerView);
+        LinearLayoutManager linearLayoutManagerAreas = new LinearLayoutManager(this);
         linearLayoutManagerAreas.setOrientation(RecyclerView.HORIZONTAL);
         areaRecyclerView.setLayoutManager(linearLayoutManagerAreas);
         areaRecyclerView.setHasFixedSize(true);
 
-        mealAreaPresenter=new MealAreaPresenter(MealRepositoryImp.getInstance(
+        mealAreaPresenter = new MealAreaPresenter(MealRepositoryImp.getInstance(
                 MealRemoteDataSourceImpl.getInstance(),
-                MealLocalDataSourceImpl.getInstance(this)),this);
+                MealLocalDataSourceImpl.getInstance(this)), this);
         mealAreaPresenter.getAllAreas();
-
 
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -184,25 +193,18 @@ public class HomeView extends AppCompatActivity implements
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
 
-            if (id == R.id.nav_home)
-            {
+            if (id == R.id.nav_home) {
                 // Already on home
                 drawerLayout.closeDrawer(GravityCompat.START);
-            }
-            else if (id == R.id.nav_favorites)
-            {
+            } else if (id == R.id.nav_favorites) {
                 startActivity(new Intent(HomeView.this, FavoriteView.class));
-            }
-            else if (id == R.id.nav_meal_planner)
-            {
+            } else if (id == R.id.nav_meal_planner) {
                 startActivity(new Intent(HomeView.this, FavoriteView.class));
-            }
-            else if (id == R.id.nav_profile)
-            {
+            } else if (id == R.id.nav_profile) {
                 startActivity(new Intent(HomeView.this, FavoriteView.class));
-            }
-            else if (id == R.id.nav_logout)
-            {
+            } else if (id == R.id.nav_search) {
+                startActivity(new Intent(HomeView.this, SearchViewActivity.class));
+            } else if (id == R.id.nav_logout) {
                 // Clear session and return to login
                 SharedPreferences preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
                 preferences.edit().clear().apply();
@@ -216,7 +218,9 @@ public class HomeView extends AppCompatActivity implements
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
+
     }
+
 
     @Override
     protected void onStart()

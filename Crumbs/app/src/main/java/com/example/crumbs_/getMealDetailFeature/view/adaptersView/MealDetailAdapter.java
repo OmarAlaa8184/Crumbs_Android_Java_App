@@ -36,6 +36,7 @@ public class MealDetailAdapter extends RecyclerView.Adapter<MealDetailAdapter.Vi
         View view=layoutInflater.inflate(R.layout.ingredient_item,recyclerView,false);
         ViewHolder viewHolder=new ViewHolder(view);
         return viewHolder;
+
     }
 
     @Override

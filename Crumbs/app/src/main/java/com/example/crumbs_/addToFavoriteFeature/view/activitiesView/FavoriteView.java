@@ -29,6 +29,7 @@ import com.example.crumbs_.addToFavoriteFeature.view.adaptersView.FavoriteAdapte
 import com.example.crumbs_.addToFavoriteFeature.view.interfacesView.FavoriteViewInterface;
 import com.example.crumbs_.getRandomMeal.view.listenersView.MealOnClickListener;
 import com.example.crumbs_.loginFeature.view.activitiesView.LoginView;
+import com.example.crumbs_.searchFeature.view.activitiesView.SearchViewActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import java.lang.reflect.Field;
@@ -104,6 +105,10 @@ public class FavoriteView extends AppCompatActivity implements FavoriteViewInter
             else if (id == R.id.nav_profile)
             {
                 startActivity(new Intent(FavoriteView.this, FavoriteView.class));
+            }
+            else if (id == R.id.nav_search)
+            {
+                startActivity(new Intent(FavoriteView.this, SearchViewActivity.class));
             }
             else if (id == R.id.nav_logout)
             {

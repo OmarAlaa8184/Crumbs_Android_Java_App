@@ -8,6 +8,7 @@ import com.example.crumbs_.getRandomMeal.model.network.CategoryNetworkCallback;
 import com.example.crumbs_.getRandomMeal.model.network.IngredientNetworkCallback;
 import com.example.crumbs_.getRandomMeal.model.network.MealNetworkCallback;
 import com.example.crumbs_.getRandomMeal.model.network.MealRemoteDataSource;
+import com.example.crumbs_.getRandomMeal.model.network.SearchNetworkCallback;
 
 import java.util.List;
 
@@ -57,6 +58,32 @@ public class MealRepositoryImp implements MealRepository
     public void getAllAreas(AreaNetworkCallback areaNetworkCallback)
     {
         mealRemoteDataSource.makeAreaNetworkCallback(areaNetworkCallback);
+
+    }
+
+    @Override
+    public void searchMeals(String query, SearchNetworkCallback searchNetworkCallback)
+    {
+        mealRemoteDataSource.makeSearchMealsNetworkCallback(query,searchNetworkCallback);
+
+    }
+
+    @Override
+    public void filterByIngredient(String ingredient, SearchNetworkCallback searchNetworkCallback)
+    {
+       mealRemoteDataSource.makeFilterByIngredientNetworkCallback(ingredient,searchNetworkCallback);
+    }
+
+    @Override
+    public void filterByArea(String area, SearchNetworkCallback searchNetworkCallback)
+    {
+        mealRemoteDataSource.makeFilterByAreaNetworkCallback(area,searchNetworkCallback);
+    }
+
+    @Override
+    public void filterByCategory(String category, SearchNetworkCallback searchNetworkCallback)
+    {
+        mealRemoteDataSource.makeFilterByCategoryNetworkCallback(category,searchNetworkCallback);
 
     }
 
