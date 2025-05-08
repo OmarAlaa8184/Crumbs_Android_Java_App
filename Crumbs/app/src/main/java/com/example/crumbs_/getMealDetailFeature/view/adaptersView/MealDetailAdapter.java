@@ -50,8 +50,8 @@ public class MealDetailAdapter extends RecyclerView.Adapter<MealDetailAdapter.Vi
 
         Glide.with(context)
                 .load(imageUrl)
-                .placeholder(R.drawable.ic_launcher_background) // Optional: add a placeholder drawable
-                .error(R.drawable.ic_launcher_foreground)
+                .placeholder(R.drawable.logo) // Optional: add a placeholder drawable
+                .error(R.drawable.ic_launcher_background)
                 .into(viewHolder.ingredientImage);
 
     }
