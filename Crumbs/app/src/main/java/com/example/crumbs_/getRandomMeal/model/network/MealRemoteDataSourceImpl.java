@@ -3,7 +3,12 @@ package com.example.crumbs_.getRandomMeal.model.network;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.AreaResponse;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.CategoryResponse;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.IngredientResponse;
+import com.example.crumbs_.getRandomMeal.model.mealPojo.Meal;
+import com.example.crumbs_.getRandomMeal.model.mealPojo.MealPlanner;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.MealResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -243,5 +248,42 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource
 
             }
         });
+    }
+
+    @Override
+    public void makeMealPlannerNetworkCallback(MealPlannerNetworkCallback mealPlannerNetworkCallback)
+    {
+        mealService.getRandomMeal().enqueue(new Callback<MealResponse>() {
+            @Override
+            public void onResponse(Call<MealResponse> call, Response<MealResponse> response)
+            {
+                if (response.isSuccessful())
+                {
+                    mealPlannerNetworkCallback.onSuccessResult(convertMealsToMealPlanners(response.body().getMeals()));
+                }
+                else
+                {
+                    mealPlannerNetworkCallback.onFailureResult(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MealResponse> call, Throwable t)
+            {
+                mealPlannerNetworkCallback.onFailureResult(t.getMessage());
+            }
+        });
+
+    }
+    private List<MealPlanner> convertMealsToMealPlanners(List<Meal> meals) {
+        List<MealPlanner> mealPlanners = new ArrayList<>();
+        if (meals != null)
+        {
+            for (Meal meal : meals)
+            {
+                mealPlanners.add(meal.toMealPlanner(System.currentTimeMillis()));
+            }
+        }
+        return mealPlanners;
     }
 }

@@ -12,6 +12,8 @@ public class MealLocalDataSourceImpl implements MealLocalDataSource
 {
     private MealDAO mealDAO;
     private LiveData<List<Meal>> meals;
+    private LiveData<List<String>> favoriteMeals;
+
     private static MealLocalDataSourceImpl mealLocalDataSourceImpl=null;
 
     private MealLocalDataSourceImpl(Context context)
@@ -59,4 +61,25 @@ public class MealLocalDataSourceImpl implements MealLocalDataSource
     {
         return meals;
     }
+
+    @Override
+    public LiveData<List<String>> getFavoriteMealIds() {
+
+        return favoriteMeals;
+    }
+
+    @Override
+    public void updateFavoriteStatus(String mealId, boolean isFavorite)
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                mealDAO.updateFavoriteStatus(mealId,isFavorite);
+            }
+        });
+
+    }
+
+
 }

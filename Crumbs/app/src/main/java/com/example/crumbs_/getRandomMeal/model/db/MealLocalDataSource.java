@@ -11,4 +11,8 @@ public interface MealLocalDataSource
     void insertMeal(Meal meal);
     void deleteMeal(Meal meal);
     LiveData<List<Meal>> getStoredMeals();
+    LiveData<List<String>> getFavoriteMealIds();
+    void updateFavoriteStatus(String mealId, boolean isFavorite);
+
+
 }

@@ -48,8 +48,8 @@ public class MealAreaAdaptor extends RecyclerView.Adapter<MealAreaAdaptor.ViewHo
         String areaImageUrl = getAreaFlagUrl(area.getArea());
         Glide.with(context)
                 .load(areaImageUrl)
-                .placeholder(R.drawable.ic_launcher_background) // Optional: add a placeholder drawable
-                .error(R.drawable.ic_launcher_foreground)
+                .placeholder(R.drawable.logo) // Optional: add a placeholder drawable
+                .error(R.drawable.ic_launcher_background)
                 .into(holder.image);
     }
 

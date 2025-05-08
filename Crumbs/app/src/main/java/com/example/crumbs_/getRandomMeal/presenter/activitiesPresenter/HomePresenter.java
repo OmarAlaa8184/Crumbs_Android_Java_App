@@ -24,6 +24,7 @@ public class HomePresenter implements HomePresenterInterface, MealNetworkCallbac
     {
         mealRepository.getAllMeals(this);
     }
+
     @Override
     public void insertMeal(Meal meal)
     {
@@ -34,6 +35,12 @@ public class HomePresenter implements HomePresenterInterface, MealNetworkCallbac
     public void deleteFromFav(Meal meal)
     {
         mealRepository.deleteMeal(meal);
+    }
+
+    @Override
+    public void toggleFavorite(Meal meal) {
+        boolean newFavoriteState = meal.isFavorite();
+        mealRepository.updateFavoriteStatus(meal.getIdMeal(), newFavoriteState);
     }
 
 

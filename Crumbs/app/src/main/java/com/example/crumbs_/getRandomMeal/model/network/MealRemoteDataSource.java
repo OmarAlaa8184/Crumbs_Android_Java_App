@@ -17,7 +17,7 @@ public interface MealRemoteDataSource
 
     void makeFilterByCategoryNetworkCallback(String category, SearchNetworkCallback searchNetworkCallback);
 
-
+   void makeMealPlannerNetworkCallback(MealPlannerNetworkCallback mealPlannerNetworkCallback);
 
 
 }

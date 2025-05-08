@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "meal_table")
-public class Meal
+public class Meal  implements Serializable
 {
     @PrimaryKey
     @NonNull
@@ -18,6 +20,18 @@ public class Meal
     private String strTags;
     private String strYoutube;
     private String strSource;
+
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite)
+    {
+        isFavorite = favorite;
+    }
+
+    private boolean isFavorite;
     private String strIngredient1;
     private String strIngredient2;
     private String strIngredient3;
@@ -59,7 +73,7 @@ public class Meal
     private String strMeasure19;
     private String strMeasure20;
 
-    public Meal(@NonNull String idMeal, String strMeal, String strCategory, String strArea, String strInstructions, String strMealThumb, String strTags, String strYoutube, String strSource, String strIngredient3, String strIngredient1, String strIngredient2, String strIngredient4, String strIngredient5, String strIngredient6, String strIngredient7, String strIngredient9, String strIngredient10, String strIngredient8, String strIngredient11, String strIngredient13, String strIngredient12, String strIngredient14, String strIngredient15, String strIngredient17, String strIngredient16, String strIngredient18, String strIngredient19, String strIngredient20, String strMeasure2, String strMeasure1, String strMeasure3, String strMeasure5, String strMeasure7, String strMeasure4, String strMeasure6, String strMeasure8, String strMeasure10, String strMeasure9, String strMeasure13, String strMeasure15, String strMeasure12, String strMeasure11, String strMeasure14, String strMeasure16, String strMeasure17, String strMeasure18, String strMeasure19, String strMeasure20) {
+    public Meal( String idMeal, String strMeal, String strCategory, String strArea, String strInstructions, String strMealThumb, String strTags, String strYoutube, String strSource,boolean isFavorite, String strIngredient3, String strIngredient1, String strIngredient2, String strIngredient4, String strIngredient5, String strIngredient6, String strIngredient7, String strIngredient9, String strIngredient10, String strIngredient8, String strIngredient11, String strIngredient13, String strIngredient12, String strIngredient14, String strIngredient15, String strIngredient17, String strIngredient16, String strIngredient18, String strIngredient19, String strIngredient20, String strMeasure2, String strMeasure1, String strMeasure3, String strMeasure5, String strMeasure7, String strMeasure4, String strMeasure6, String strMeasure8, String strMeasure10, String strMeasure9, String strMeasure13, String strMeasure15, String strMeasure12, String strMeasure11, String strMeasure14, String strMeasure16, String strMeasure17, String strMeasure18, String strMeasure19, String strMeasure20) {
         this.idMeal = idMeal;
         this.strMeal = strMeal;
         this.strCategory = strCategory;
@@ -69,6 +83,7 @@ public class Meal
         this.strTags = strTags;
         this.strYoutube = strYoutube;
         this.strSource = strSource;
+        this.isFavorite = isFavorite;
         this.strIngredient3 = strIngredient3;
         this.strIngredient1 = strIngredient1;
         this.strIngredient2 = strIngredient2;
@@ -112,9 +127,8 @@ public class Meal
     }
 
 
-    @NonNull
     public String getIdMeal() {
-        return idMeal;
+        return idMeal != null ? idMeal : "";
     }
 
     public String getStrMeal() {
@@ -504,4 +518,10 @@ public class Meal
     public void setIdMeal(@NonNull String idMeal) {
         this.idMeal = idMeal;
     }
+
+    public MealPlanner toMealPlanner(long date)
+    {
+        return new MealPlanner(date,idMeal,strMeal,strInstructions,strMealThumb,strYoutube,strCategory,strArea);
+    }
+
 }

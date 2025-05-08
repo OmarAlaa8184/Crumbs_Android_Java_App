@@ -8,4 +8,6 @@ public interface HomePresenterInterface
     public void insertMeal(Meal meal);
     public void deleteFromFav(Meal meal);
 
+    public void toggleFavorite(Meal meal);
+
 }

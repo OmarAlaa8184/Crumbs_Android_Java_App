@@ -31,4 +31,7 @@ public interface MealRepository
     public void deleteMeal(Meal meal);
 
     public LiveData<List<Meal>> getStoredMeals();
+
+    LiveData<List<String>> getFavoriteMealIds();
+    void updateFavoriteStatus(String mealId, boolean isFavorite);
 }

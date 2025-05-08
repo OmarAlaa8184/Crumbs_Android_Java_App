@@ -1,16 +1,12 @@
 package com.example.crumbs_.getRandomMeal.view.activitiesView;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,9 +20,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.example.crumbs_.R;
 import com.example.crumbs_.addToFavoriteFeature.view.activitiesView.FavoriteView;
+import com.example.crumbs_.changeOldPasswordFeature.view.activitiesView.ChangeOldPasswordView;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.Area;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.Ingredient;
 import com.example.crumbs_.getRandomMeal.presenter.activitiesPresenter.MealAreaPresenter;
@@ -49,6 +45,13 @@ import com.example.crumbs_.getRandomMeal.view.interfacesView.HomeViewInterface;
 import com.example.crumbs_.getRandomMeal.view.interfacesView.MealIngredientViewInterface;
 import com.example.crumbs_.getRandomMeal.view.listenersView.MealOnClickListener;
 import com.example.crumbs_.loginFeature.view.activitiesView.LoginView;
+import com.example.crumbs_.logoutFeature.view.LogoutView;
+import com.example.crumbs_.mealPlannerFeature.view.activitiesView.PlannerView;
+import com.example.crumbs_.offlineFeature.model.NetworkChangeReceiver;
+import com.example.crumbs_.offlineFeature.model.NetworkMonitor;
+import com.example.crumbs_.offlineFeature.view.NetworkSplashActivity;
+import com.example.crumbs_.offlineFeature.presenter.NetworkSplashPresenter;
+import com.example.crumbs_.offlineFeature.view.NetworkSplashView;
 import com.example.crumbs_.searchFeature.view.activitiesView.SearchViewActivity;
 import com.google.android.material.navigation.NavigationView;
 
@@ -59,7 +62,7 @@ import java.util.List;
 public class HomeView extends AppCompatActivity implements
                                                            HomeViewInterface,
         MealCategoriesViewInterface, MealOnClickListener,
-        MealIngredientViewInterface, MealAreaViewInterface
+        MealIngredientViewInterface, MealAreaViewInterface, NetworkSplashView
 {
 
     private DrawerLayout drawerLayout;
@@ -91,6 +94,10 @@ public class HomeView extends AppCompatActivity implements
     private MealAreaPresenter mealAreaPresenter;
     private List<Area> areas;
 
+    private boolean isGuest;
+
+    private NetworkChangeReceiver networkChangeReceiver;
+    private NetworkSplashPresenter networkPresenter;
 
 
     @Override
@@ -118,12 +125,26 @@ public class HomeView extends AppCompatActivity implements
         navigationView = findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_home);
 
-        SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
-        String userEmail = prefs.getString("EMAIL", "guest@example.com");
+        if(isGuest)
+        {
+            SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+            String userEmail = prefs.getString("EMAIL", "guest@example.com");
+        }
+        else
+        {
+            SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+            String userEmail = prefs.getString("EMAIL", "guest@example.com");
 
-        View headerView = navigationView.getHeaderView(0);
-        TextView userEmailTextView = headerView.findViewById(R.id.userEmailTextView);
-        userEmailTextView.setText(userEmail);
+            View headerView = navigationView.getHeaderView(0);
+            TextView userEmailTextView = headerView.findViewById(R.id.userEmailTextView);
+            userEmailTextView.setText(userEmail);
+
+        }
+
+        this.context = this; // or getApplicationContext()
+        SharedPreferences prefs1 = context.getSharedPreferences("user_prefs1", Context.MODE_PRIVATE);
+        isGuest = prefs1.getBoolean("isGuest", false);
+
 
         /* Random MEAL  */
 
@@ -181,6 +202,13 @@ public class HomeView extends AppCompatActivity implements
                 MealLocalDataSourceImpl.getInstance(this)), this);
         mealAreaPresenter.getAllAreas();
 
+        /*offline*/
+        networkPresenter=new NetworkSplashPresenter(this,new NetworkMonitor(this));
+        networkChangeReceiver = new NetworkChangeReceiver();
+        NetworkChangeReceiver.setPresenter(networkPresenter);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        registerReceiver(networkChangeReceiver, filter);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
@@ -196,31 +224,79 @@ public class HomeView extends AppCompatActivity implements
             if (id == R.id.nav_home) {
                 // Already on home
                 drawerLayout.closeDrawer(GravityCompat.START);
-            } else if (id == R.id.nav_favorites) {
-                startActivity(new Intent(HomeView.this, FavoriteView.class));
-            } else if (id == R.id.nav_meal_planner) {
-                startActivity(new Intent(HomeView.this, FavoriteView.class));
-            } else if (id == R.id.nav_profile) {
-                startActivity(new Intent(HomeView.this, FavoriteView.class));
-            } else if (id == R.id.nav_search) {
-                startActivity(new Intent(HomeView.this, SearchViewActivity.class));
-            } else if (id == R.id.nav_logout) {
-                // Clear session and return to login
-                SharedPreferences preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
-                preferences.edit().clear().apply();
-
-                Intent intent = new Intent(HomeView.this, LoginView.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
             }
+            else if (id == R.id.nav_favorites)
+            {
+                if (isGuest)
+                {
+                    startActivity(new Intent(HomeView.this, LoginView.class));
+                    Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show();
 
+                }
+                else
+                {
+                    startActivity(new Intent(HomeView.this, FavoriteView.class));
+                }
+            }
+            else if (id == R.id.nav_meal_planner)
+            {
+                if (isGuest)
+                {
+
+                    startActivity(new Intent(HomeView.this, LoginView.class));
+                    Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show();
+
+                }
+                else
+                {
+                    startActivity(new Intent(HomeView.this, PlannerView.class));
+                }
+
+            }
+            else if (id == R.id.nav_profile)
+            {
+                if (isGuest)
+                {
+                    startActivity(new Intent(HomeView.this, LoginView.class));
+                    Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show();
+
+                }
+                else
+                {
+                    startActivity(new Intent(HomeView.this, ChangeOldPasswordView.class));
+                }
+
+            }
+            else if (id == R.id.nav_search)
+            {
+                startActivity(new Intent(HomeView.this, SearchViewActivity.class));
+            }
+            else if (id == R.id.nav_logout)
+            {
+                if (isGuest)
+                {
+                    startActivity(new Intent(HomeView.this, LoginView.class));
+                    Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show();
+
+                }
+                else
+                {
+                    startActivity(new Intent(HomeView.this, LogoutView.class));
+                }
+
+            }
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences prefs1 = getSharedPreferences("user_prefs1", MODE_PRIVATE);
+        isGuest = prefs1.getBoolean("isGuest", true); // Default to true
+    }
 
     @Override
     protected void onStart()
@@ -235,6 +311,19 @@ public class HomeView extends AppCompatActivity implements
         homeAdapter.setMeals(meals);
         recyclerView.setAdapter(homeAdapter);
     }
+
+    @Override
+    public void showSplashScreen()
+    {
+        Intent intent = new Intent(this, NetworkSplashActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void hideSplashScreen() {
+
+    }
+
     @Override
     public void showError(String message)
     {
@@ -283,19 +372,74 @@ public class HomeView extends AppCompatActivity implements
     @Override
     public void onFavoriteClick(Meal meal, boolean isFavorite)
     {
-        if (isFavorite)
+
+        if (isGuest)
         {
-            // Add to favorites
-            homePresenter.insertMeal(meal);
-            Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please login to manage favorites", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(HomeView.this, LoginView.class));
+
         }
         else
         {
-            // Remove from favorites
-            homePresenter.deleteFromFav(meal);
-            Toast.makeText(this, "Removed from favorites", Toast.LENGTH_SHORT).show();
+            if (isFavorite) {
+                // Add to favorites
+                homePresenter.insertMeal(meal);
+                Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show();
+            } else {
+                // Remove from favorites
+                homePresenter.deleteFromFav(meal);
+                Toast.makeText(this, "Removed from favorites", Toast.LENGTH_SHORT).show();
+            }
         }
 
+    }
+
+
+    @Override
+    public void onFavoriteClick1(Meal meal)
+    {
+
+        if (isGuest)
+        {
+            Toast.makeText(this, "Please login to manage favorites", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(HomeView.this, LoginView.class));
+
+        }
+        else
+        {
+          if (meal.isFavorite()) {
+            homePresenter.deleteFromFav(meal);
+            Toast.makeText(this, "Removed from favorites", Toast.LENGTH_SHORT).show();
+          }
+          else
+          {
+            meal.setFavorite(!meal.isFavorite());
+            homePresenter.insertMeal(meal);
+            Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show();
+          }
+
+           homePresenter.toggleFavorite(meal);
+        }
+    }
+
+    @Override
+    public void onPlannerClick(Meal meal, boolean isPlanned)
+    {
+        if (isGuest) {
+            Toast.makeText(this, "Please login to access the planner", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(HomeView.this, LoginView.class));
+        }
+        else
+        {
+            Intent intent= new Intent(HomeView.this,PlannerView.class);
+
+            if (meal != null) {
+                intent.putExtra("MEAL", meal);
+                startActivity(intent);
+            } else {
+                Log.e("HomeView", "Meal is null");
+            }
+        }
     }
 
     @Override

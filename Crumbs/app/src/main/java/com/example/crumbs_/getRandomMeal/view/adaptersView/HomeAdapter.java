@@ -29,12 +29,15 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>
     private MealOnClickListener mealOnClickListener;
 
     private Set<String> favoriteMealIds = new HashSet<>();
+    private Set<String> plannedMealIds = new HashSet<>();
+
 
     public HomeAdapter(List<Meal> meals, Context context, MealOnClickListener mealOnClickListener) {
         this.meals = meals;
         this.context = context;
         this.mealOnClickListener = mealOnClickListener;
     }
+
 
 
     @NonNull
@@ -84,24 +87,71 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>
             @Override
             public void onClick(View v)
             {
-             boolean newFavoriteState = !favoriteMealIds.contains(meal.getIdMeal());
+                boolean newFavoriteState = !favoriteMealIds.contains(meal.getIdMeal());
 
-            if (newFavoriteState)
-            {
-                favoriteMealIds.add(meal.getIdMeal());
-                viewHolder.favoriteButton.setImageResource(R.drawable.ic_favorite_filled);
+                if (newFavoriteState)
+                {
+                    favoriteMealIds.add(meal.getIdMeal());
+                    viewHolder.favoriteButton.setImageResource(R.drawable.ic_favorite_filled);
+                }
+                else
+                {
+                    favoriteMealIds.remove(meal.getIdMeal());
+                    viewHolder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+                }
+
+                // Notify your database/presenter about the change
+                mealOnClickListener.onFavoriteClick(meal, newFavoriteState);
             }
-            else
+
+        });
+
+/*
+        viewHolder.favoriteButton.setImageResource(meal.isFavorite() ? R.drawable.ic_favorite_filled: R.drawable.ic_favorite_border  );
+        viewHolder.favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
             {
-                favoriteMealIds.remove(meal.getIdMeal());
-                viewHolder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+
+                if (meal.isFavorite())
+                {
+                    viewHolder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+                }
+                else
+                {
+                    viewHolder.favoriteButton.setImageResource(R.drawable.ic_favorite_filled);
+                }
+                mealOnClickListener.onFavoriteClick1(meal);
+
             }
 
-            // Notify your database/presenter about the change
-            mealOnClickListener.onFavoriteClick(meal, newFavoriteState);
-        }
+        });*/
 
-      });
+        boolean isPlanned = plannedMealIds.contains(meal.getIdMeal());
+
+        viewHolder.plannerButton.setImageResource(isPlanned ? R.drawable.ic_clander_filled : R.drawable.ic_calendar_border);
+
+        viewHolder.plannerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                boolean newPlannedState = !plannedMealIds.contains(meal.getIdMeal());
+
+                if (newPlannedState)
+                {
+                    plannedMealIds.add(meal.getIdMeal());
+                    viewHolder.plannerButton.setImageResource(R.drawable.ic_clander_filled);
+                }
+                else
+                {
+                    plannedMealIds.remove(meal.getIdMeal());
+                    viewHolder.plannerButton.setImageResource(R.drawable.ic_calendar_border);
+                }
+
+                // Notify your database/presenter about the change
+                mealOnClickListener.onPlannerClick(meal, newPlannedState);
+            }
+        });
     }
 
 
@@ -119,7 +169,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>
     {
         ImageView mealImage;
         TextView mealName, mealCategory, mealArea;
-        ImageButton youtubeButton,favoriteButton;
+        ImageButton youtubeButton,favoriteButton,plannerButton;
         public ViewHolder(@NonNull View itemView)
         {
             super(itemView);
@@ -129,6 +179,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>
             mealArea = itemView.findViewById(R.id.mealArea);
             youtubeButton = itemView.findViewById(R.id.youtubeButton);
             favoriteButton=itemView.findViewById(R.id.favoriteButton);
+            plannerButton=itemView.findViewById(R.id.plannerButton);
         }
     }
 }

@@ -102,6 +102,19 @@ public class MealRepositoryImp implements MealRepository
     @Override
     public LiveData<List<Meal>> getStoredMeals()
     {
-            return mealLocalDataSource.getStoredMeals();
+        return mealLocalDataSource.getStoredMeals();
     }
+
+    @Override
+    public LiveData<List<String>> getFavoriteMealIds() {
+        return mealLocalDataSource.getFavoriteMealIds();
+    }
+
+    @Override
+    public void updateFavoriteStatus(String mealId, boolean isFavorite)
+    {
+          mealLocalDataSource.updateFavoriteStatus(mealId,isFavorite);
+    }
+
+
 }
