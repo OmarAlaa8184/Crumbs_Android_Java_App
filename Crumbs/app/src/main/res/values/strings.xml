@@ -52,4 +52,15 @@
     <string name="areas">Areas</string>
     <string name="search_results">Search Results</string>
     <string name="no_results_found">No Results Found</string>
+    <string name="goodbye">GoodBy...</string>
+    <string name="logout_confirmation">Logout Confirmation</string>
+    <string name="cancel">Cancel</string>
+    <string name="AssignRandomMeal">Assign Random Meal</string>
+    <string name="addMeal">Add Meal</string>
+    <string name="ClearMealPlan">Clear Meal Plan</string>
+    <string name="asAguest">Continue as Guest</string>
+    <string name="skip">Skip!!</string>
+    <string name="NoInternetConnection">No Internet Connection</string>
+    <string name="retry">Retry</string>
+    <string name="goToFav">Go To Favorites</string>
 </resources>
