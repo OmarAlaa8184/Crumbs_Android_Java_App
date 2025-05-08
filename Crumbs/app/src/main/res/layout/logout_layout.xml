@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/logoscreen"
+        android:padding="24dp">
+
+        <!-- Goodbye text -->
+
+        <!-- Confirmation message -->
+
+        <!-- Logout Button -->
+
+        <TextView
+            android:id="@+id/goodbyeText"
+            android:layout_width="237dp"
+            android:layout_height="54dp"
+            android:layout_marginTop="208dp"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:text="@string/goodbye"
+            android:textColor="@color/fireinlogo"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.611"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Cancel Button -->
+
+        <TextView
+            android:id="@+id/confirmationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:text="@string/logout_confirmation"
+            android:textColor="@color/slogen"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/goodbyeText" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/logoutButton"
+            android:layout_width="287dp"
+            android:layout_height="53dp"
+            android:layout_marginTop="36dp"
+            android:backgroundTint="@color/slogen"
+            android:fontFamily="@font/poppinsbold"
+            android:text="@string/logout"
+            android:textColor="@color/ic_launcher_background"
+            android:textSize="18sp"
+            app:cornerRadius="28dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/confirmationText" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancelButton"
+            android:layout_width="209dp"
+            android:layout_height="51dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@android:color/transparent"
+            android:fontFamily="@font/poppinsbold"
+            android:text="@string/cancel"
+            android:textColor="@color/slogen"
+            android:textSize="18sp"
+            app:cornerRadius="28dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logoutButton"
+            app:strokeColor="@color/slogen"
+            app:strokeWidth="2dp" />
+
+        <!-- Profile Image -->
+
+        <!-- User Name -->
+        <TextView
+            android:id="@+id/userNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:textColor="@color/fireinlogo"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="499dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

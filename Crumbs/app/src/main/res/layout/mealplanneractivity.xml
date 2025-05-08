@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:padding="5dp"
+    android:background="@drawable/mainscreenbackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        android:padding="16dp">
+
+        <!-- Calendar View -->
+        <CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/ic_calender_rounded"
+            android:theme="@style/CalendarViewStyle"/>
+
+        <!-- Button Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:weightSum="2">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRandomMeal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppinsbold"
+                android:text="@string/AssignRandomMeal"
+                android:textColor="@color/ic_launcher_background"
+                app:backgroundTint="@color/slogen"
+                app:cornerRadius="24dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFilterByCategory"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppinsbold"
+                android:text="@string/addMeal"
+                android:textColor="@color/ic_launcher_background"
+                app:backgroundTint="@color/fireinlogo"
+                app:cornerRadius="24dp" />
+        </LinearLayout>
+
+        <!-- Clear Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnClearMealPlan"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/poppinsbold"
+            android:text="@string/ClearMealPlan"
+            android:textColor="@color/slogen"
+            app:backgroundTint="@android:color/transparent"
+            app:cornerRadius="24dp"
+            app:strokeColor="@color/slogen"
+            app:strokeWidth="2dp" />
+
+        <!-- Meal Plan RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMealPlan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="200dp"
+            android:clipToPadding="false"
+            android:paddingBottom="16dp"/>
+
+    </LinearLayout>
+</ScrollView>
