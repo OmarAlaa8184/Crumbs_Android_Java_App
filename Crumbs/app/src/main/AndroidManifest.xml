@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -33,6 +34,10 @@
         <activity android:name=".getRandomMeal.view.activitiesView.HomeView"/>
         <activity android:name=".addToFavoriteFeature.view.activitiesView.FavoriteView"/>
         <activity android:name=".getMealDetailFeature.view.activitiesView.MealDetailView"/>
+        <activity android:name=".searchFeature.view.activitiesView.SearchViewActivity"/>
+        <activity android:name=".mealPlannerFeature.view.activitiesView.PlannerView"/>
+        <activity android:name=".logoutFeature.view.LogoutView"/>
+        <activity android:name=".offlineFeature.view.NetworkSplashActivity"/>
     </application>
 
 </manifest>
