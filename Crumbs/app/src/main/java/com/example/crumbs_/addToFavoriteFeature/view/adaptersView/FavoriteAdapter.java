@@ -16,6 +16,7 @@ import com.example.crumbs_.R;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.Meal;
 import com.example.crumbs_.getRandomMeal.view.listenersView.MealOnClickListener;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -59,7 +60,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         Glide.with(context)
                 .load(meal.getStrMealThumb())
                 .placeholder(R.drawable.logo)
-                .error(R.drawable.ic_launcher_background)
+                .error(R.drawable.logo)
                 .into(viewHolder.mealImage);
 
         viewHolder.youtubeButton.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +76,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                 mealOnClickListener.onMealClick(meal);
             }
         });
+
 
         boolean isFavorite = favoriteMealIds.contains(meal.getIdMeal());
 
@@ -102,6 +104,26 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             }
 
         });
+       /* viewHolder.favoriteButton.setImageResource(meal.isFavorite() ? R.drawable.ic_favorite_filled: R.drawable.ic_favorite_border  );
+
+        viewHolder.favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+
+
+                if (meal.isFavorite())
+                {
+                    viewHolder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+                }
+                else
+                {
+                    viewHolder.favoriteButton.setImageResource(R.drawable.ic_favorite_filled);
+                }
+                mealOnClickListener.onFavoriteClick1(meal);
+            }
+
+        });*/
 
     }
 
@@ -112,7 +134,8 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
     }
 
     public void setMeals(List<Meal> meals) {
-        this.meals = meals;
+        this.meals = meals != null ? meals : new ArrayList<>();
+        notifyDataSetChanged();
     }
     public class ViewHolder extends RecyclerView.ViewHolder
     {

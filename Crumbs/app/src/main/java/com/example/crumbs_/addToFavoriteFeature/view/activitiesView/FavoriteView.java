@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crumbs_.R;
+import com.example.crumbs_.changeOldPasswordFeature.view.activitiesView.ChangeOldPasswordView;
 import com.example.crumbs_.getMealDetailFeature.view.activitiesView.MealDetailView;
 import com.example.crumbs_.getRandomMeal.model.db.MealLocalDataSourceImpl;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.Meal;
@@ -29,6 +32,8 @@ import com.example.crumbs_.addToFavoriteFeature.view.adaptersView.FavoriteAdapte
 import com.example.crumbs_.addToFavoriteFeature.view.interfacesView.FavoriteViewInterface;
 import com.example.crumbs_.getRandomMeal.view.listenersView.MealOnClickListener;
 import com.example.crumbs_.loginFeature.view.activitiesView.LoginView;
+import com.example.crumbs_.logoutFeature.view.LogoutView;
+import com.example.crumbs_.mealPlannerFeature.view.activitiesView.PlannerView;
 import com.example.crumbs_.searchFeature.view.activitiesView.SearchViewActivity;
 import com.google.android.material.navigation.NavigationView;
 
@@ -63,6 +68,14 @@ public class FavoriteView extends AppCompatActivity implements FavoriteViewInter
         navigationView = findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_favorites);
 
+        SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String userEmail = prefs.getString("EMAIL", "guest@example.com");
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView userEmailTextView = headerView.findViewById(R.id.userEmailTextView);
+        userEmailTextView.setText(userEmail);
+
+
         recyclerView = findViewById(R.id.mealsRecyclerView);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -91,7 +104,7 @@ public class FavoriteView extends AppCompatActivity implements FavoriteViewInter
 
             if (id == R.id.nav_favorites)
             {
-                // Already on home
+                // Already on fav
                 drawerLayout.closeDrawer(GravityCompat.START);
             }
             else if (id == R.id.nav_home)
@@ -100,11 +113,11 @@ public class FavoriteView extends AppCompatActivity implements FavoriteViewInter
             }
             else if (id == R.id.nav_meal_planner)
             {
-                startActivity(new Intent(FavoriteView.this, FavoriteView.class));
+                startActivity(new Intent(FavoriteView.this, PlannerView.class));
             }
             else if (id == R.id.nav_profile)
             {
-                startActivity(new Intent(FavoriteView.this, FavoriteView.class));
+                startActivity(new Intent(FavoriteView.this, ChangeOldPasswordView.class));
             }
             else if (id == R.id.nav_search)
             {
@@ -112,14 +125,7 @@ public class FavoriteView extends AppCompatActivity implements FavoriteViewInter
             }
             else if (id == R.id.nav_logout)
             {
-                // Clear session and return to login
-                SharedPreferences preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
-                preferences.edit().clear().apply();
-
-                Intent intent = new Intent(FavoriteView.this, LoginView.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
+                startActivity(new Intent(FavoriteView.this, LogoutView.class));
             }
 
             drawerLayout.closeDrawer(GravityCompat.START);
@@ -146,6 +152,8 @@ public class FavoriteView extends AppCompatActivity implements FavoriteViewInter
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
     }
+
+
 
     @Override
     public void onMealClick(Meal meal)
@@ -208,5 +216,29 @@ public class FavoriteView extends AppCompatActivity implements FavoriteViewInter
             favoritePresenter.insertMeal(meal);
             Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onFavoriteClick1(Meal meal)
+    {
+
+        if (meal.isFavorite())
+        {
+            favoritePresenter.deleteFromFav(meal);
+            Toast.makeText(this, "Removed from favorites", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            meal.setFavorite(!meal.isFavorite());
+            favoritePresenter.insertMeal(meal);
+            Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show();
+        }
+        favoritePresenter.toggleFavorite(meal);
+
+    }
+
+    @Override
+    public void onPlannerClick(Meal meal, boolean isPlanned) {
+
     }
 }

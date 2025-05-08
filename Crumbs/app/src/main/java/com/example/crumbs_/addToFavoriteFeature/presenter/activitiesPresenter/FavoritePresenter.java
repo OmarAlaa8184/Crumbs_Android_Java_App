@@ -38,4 +38,11 @@ public class FavoritePresenter implements FavoritePresenterInterface
     {
         mealRepository.insertMeal(meal);
     }
+
+    @Override
+    public void toggleFavorite(Meal meal) {
+
+        boolean newFavoriteState = meal.isFavorite();
+        mealRepository.updateFavoriteStatus(meal.getIdMeal(), newFavoriteState);
+    }
 }

@@ -11,4 +11,6 @@ public interface FavoriteViewInterface
 
     public void showData(LiveData<List<Meal>> meals);
     public void showError(String message);
+
+
 }
