@@ -2,8 +2,10 @@ package com.example.crumbs_.searchFeature.view.activitiesView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -24,7 +26,10 @@ import com.example.crumbs_.getRandomMeal.model.db.MealLocalDataSourceImpl;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.Meal;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.MealRepositoryImp;
 import com.example.crumbs_.getRandomMeal.model.network.MealRemoteDataSourceImpl;
+import com.example.crumbs_.getRandomMeal.view.activitiesView.HomeView;
 import com.example.crumbs_.getRandomMeal.view.listenersView.MealOnClickListener;
+import com.example.crumbs_.loginFeature.view.activitiesView.LoginView;
+import com.example.crumbs_.mealPlannerFeature.view.activitiesView.PlannerView;
 import com.example.crumbs_.searchFeature.presenter.activitiesPresenter.SearchPresenter;
 import com.example.crumbs_.searchFeature.view.InterfacesView.SearchViewInterface;
 import com.example.crumbs_.searchFeature.view.adaptersView.SearchAdapter;
@@ -50,6 +55,7 @@ public class SearchViewActivity extends AppCompatActivity implements SearchViewI
     private enum SearchType { All, Ingredient, Area, Category }
     private SearchType currentSearchType = SearchType.All;
 
+    private boolean isGuest;
 
 
     @Override
@@ -67,6 +73,8 @@ public class SearchViewActivity extends AppCompatActivity implements SearchViewI
         searchRecyclerView = findViewById(R.id.searchRecyclerView);
         noResultsView = findViewById(R.id.noResultsView);
 
+        SharedPreferences prefs = getSharedPreferences("user_prefs1", MODE_PRIVATE);
+        isGuest = prefs.getBoolean("isGuest", false);
 
         searchView.setupWithSearchBar(searchBar);
         searchView.setHint(getString(R.string.search_hint));
@@ -173,24 +181,17 @@ public class SearchViewActivity extends AppCompatActivity implements SearchViewI
                 searchPresenter.search("All", query);
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences prefs = getSharedPreferences("user_prefs1", MODE_PRIVATE);
+        isGuest = prefs.getBoolean("isGuest", false);
+    }
+
     @Override
     public void showMeals(List<Meal> meals)
     {
-        /*this.meals.clear();;
-        this.meals.addAll(meals);
-        searchAdapter.setMeals(meals);
-        searchRecyclerView.setAdapter(searchAdapter);
-        searchAdapter.notifyDataSetChanged();
-        if (meals.isEmpty())
-        {
-            searchRecyclerView.setVisibility(View.GONE);
-            noResultsView.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            searchRecyclerView.setVisibility(View.VISIBLE);
-            noResultsView.setVisibility(View.GONE);
-        }*/
         if (meals == null || meals.isEmpty()) {
             searchRecyclerView.setVisibility(View.GONE);
             noResultsView.setVisibility(View.VISIBLE);
@@ -271,5 +272,53 @@ public class SearchViewActivity extends AppCompatActivity implements SearchViewI
             searchPresenter.deleteFromFav(meal);
             Toast.makeText(this, "Removed from favorites", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onFavoriteClick1(Meal meal) {
+        if (isGuest)
+        {
+            Toast.makeText(this, "Please login to manage favorites", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(SearchViewActivity.this, LoginView.class));
+
+        }
+        else
+        {
+            if (meal.isFavorite())
+            {
+                searchPresenter.deleteFromFav(meal);
+                Toast.makeText(this, "Removed from favorites", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                meal.setFavorite(!meal.isFavorite());
+                searchPresenter.insertMeal(meal);
+                Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show();
+            }
+            searchPresenter.toggleFavorite(meal);
+        }
+
+    }
+
+
+    @Override
+    public void onPlannerClick(Meal meal, boolean isPlanned)
+    {
+        if (isGuest) {
+            Toast.makeText(this, "Please login to access the planner", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(SearchViewActivity.this, LoginView.class));
+        }
+        else
+        {
+            Intent intent= new Intent(SearchViewActivity.this, PlannerView.class);
+
+            if (meal != null) {
+                intent.putExtra("MEAL", meal);
+                startActivity(intent);
+            } else {
+                Log.e("HomeView", "Meal is null");
+            }
+        }
+
     }
 }

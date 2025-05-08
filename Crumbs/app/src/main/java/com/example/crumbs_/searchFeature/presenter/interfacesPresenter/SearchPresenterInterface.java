@@ -8,5 +8,6 @@ public interface SearchPresenterInterface
 
     public void insertMeal(Meal meal);
     public void deleteFromFav(Meal meal);
+    public void toggleFavorite(Meal meal);
 
 }

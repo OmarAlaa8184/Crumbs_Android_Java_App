@@ -30,6 +30,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private MealOnClickListener mealOnClickListener;
 
     private Set<String> favoriteMealIds = new HashSet<>();
+    private Set<String> plannedMealIds = new HashSet<>();
+
 
     public SearchAdapter(List<Meal> meals, Context context, MealOnClickListener mealOnClickListener) {
         this.meals = meals;
@@ -77,32 +79,52 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             }
         });
 
-        boolean isFavorite = favoriteMealIds.contains(meal.getIdMeal());
 
-        viewHolder.favoriteButton.setImageResource(isFavorite ? R.drawable.ic_favorite_filled : R.drawable.ic_favorite_border);
-
+        viewHolder.favoriteButton.setImageResource(meal.isFavorite() ? R.drawable.ic_favorite_filled: R.drawable.ic_favorite_border  );
         viewHolder.favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
-             boolean newFavoriteState = !favoriteMealIds.contains(meal.getIdMeal());
 
-            if (newFavoriteState)
-            {
-                favoriteMealIds.add(meal.getIdMeal());
-                viewHolder.favoriteButton.setImageResource(R.drawable.ic_favorite_filled);
+                if (meal.isFavorite())
+                {
+                    viewHolder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+                }
+                else
+                {
+                    viewHolder.favoriteButton.setImageResource(R.drawable.ic_favorite_filled);
+                }
+                mealOnClickListener.onFavoriteClick1(meal);
+
             }
-            else
-            {
-                favoriteMealIds.remove(meal.getIdMeal());
-                viewHolder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+
+        });
+
+        boolean isPlanned = plannedMealIds.contains(meal.getIdMeal());
+
+        viewHolder.plannerButton.setImageResource(isPlanned ? R.drawable.ic_clander_filled : R.drawable.ic_calendar_border);
+
+        viewHolder.plannerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                boolean newPlannedState = !plannedMealIds.contains(meal.getIdMeal());
+
+                if (newPlannedState)
+                {
+                    plannedMealIds.add(meal.getIdMeal());
+                    viewHolder.plannerButton.setImageResource(R.drawable.ic_clander_filled);
+                }
+                else
+                {
+                    plannedMealIds.remove(meal.getIdMeal());
+                    viewHolder.plannerButton.setImageResource(R.drawable.ic_calendar_border);
+                }
+
+                // Notify your database/presenter about the change
+                mealOnClickListener.onPlannerClick(meal, newPlannedState);
             }
-
-            // Notify your database/presenter about the change
-            mealOnClickListener.onFavoriteClick(meal, newFavoriteState);
-        }
-
-      });
+        });
     }
 
 
@@ -113,8 +135,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public void setMeals(List<Meal> meals)
     {
-       /* this.meals = meals;
-        notifyDataSetChanged();*/
         this.meals.clear();
         if (meals != null)
         {
@@ -127,7 +147,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     {
         ImageView mealImage;
         TextView mealName, mealCategory, mealArea;
-        ImageButton youtubeButton,favoriteButton;
+        ImageButton youtubeButton,favoriteButton,plannerButton;
         public ViewHolder(@NonNull View itemView)
         {
             super(itemView);
@@ -137,6 +157,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             mealArea = itemView.findViewById(R.id.mealArea);
             youtubeButton = itemView.findViewById(R.id.youtubeButton);
             favoriteButton=itemView.findViewById(R.id.favoriteButton);
+            plannerButton=itemView.findViewById(R.id.plannerButton);
+
         }
     }
 }

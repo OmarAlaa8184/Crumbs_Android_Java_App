@@ -1,5 +1,7 @@
 package com.example.crumbs_.searchFeature.presenter.activitiesPresenter;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.crumbs_.getRandomMeal.model.mealPojo.Meal;
 import com.example.crumbs_.getRandomMeal.model.mealPojo.MealRepository;
 import com.example.crumbs_.getRandomMeal.model.network.SearchNetworkCallback;
@@ -58,12 +60,22 @@ public class SearchPresenter implements SearchPresenterInterface, SearchNetworkC
     }
 
     @Override
+    public void toggleFavorite(Meal meal)
+    {
+        boolean newFavoriteState = meal.isFavorite();
+        mealRepository.updateFavoriteStatus(meal.getIdMeal(), newFavoriteState);
+    }
+
+    @Override
     public void onSuccessSearchResult(List<Meal> meal)
     {
        //searchViewInterface.showMeals(meal);
-        if (meal != null && !meal.isEmpty()) {
+        if (meal != null && !meal.isEmpty())
+        {
             searchViewInterface.showMeals(meal);
-        } else {
+        }
+        else
+        {
             searchViewInterface.showError("No meals found.");
         }
     }
