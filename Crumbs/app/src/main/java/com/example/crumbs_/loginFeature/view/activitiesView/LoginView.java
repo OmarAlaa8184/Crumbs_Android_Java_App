@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.crumbs_.R;
 import com.example.crumbs_.forgetPasswordFeature.view.activitiesView.ForgetPasswordView;
+import com.example.crumbs_.getRandomMeal.view.activitiesView.HomeView;
 import com.example.crumbs_.loginFeature.presenter.activitiesPresenter.LoginPresenter;
 import com.example.crumbs_.loginFeature.view.interfacesView.LoginViewInterface;
 import com.example.crumbs_.registerFeature.view.activitiesView.RegisterView;
@@ -24,7 +25,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 public class LoginView extends AppCompatActivity implements LoginViewInterface
 {
-    TextView signUp;
+    TextView signUp,Skip;
     EditText emailEditText;
     EditText passwordEditText;
     Button loginButton;
@@ -44,6 +45,8 @@ public class LoginView extends AppCompatActivity implements LoginViewInterface
         signUp = findViewById(R.id.signupText);
         forgetPassword=findViewById(R.id.forgotPasswordText);
         googleLoginButton=findViewById(R.id.googleLoginButton);
+        Skip=findViewById(R.id.asAguest);
+
 
         loginPresenter=new LoginPresenter(this);
 
@@ -90,7 +93,24 @@ public class LoginView extends AppCompatActivity implements LoginViewInterface
 
             }
         });
+
+        Skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Save guest mode flag
+                SharedPreferences prefs1 = getSharedPreferences("user_prefs1", MODE_PRIVATE);
+                prefs1.edit().putBoolean("isGuest", true).apply();
+
+                // Go to main app
+                Intent intent = new Intent(LoginView.this, HomeView.class);
+                startActivity(intent);
+                finish(); // optional, to prevent going back to login
+            }
+        });
+
     }
+
+
 
     @Override
     public void onLogInSuccess()
@@ -99,6 +119,8 @@ public class LoginView extends AppCompatActivity implements LoginViewInterface
         Intent intent=new Intent(LoginView.this, SplashView.class);
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         prefs.edit().putString("EMAIL", emailEditText.getText().toString()).apply();
+        SharedPreferences prefs1 = getSharedPreferences("user_prefs1", MODE_PRIVATE);
+        prefs1.edit().putBoolean("isGuest", false).apply();
         startActivity(intent);
         finish();
     }
@@ -116,6 +138,8 @@ public class LoginView extends AppCompatActivity implements LoginViewInterface
         Intent intent=new Intent(LoginView.this,SplashView.class);
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         prefs.edit().putString("EMAIL", emailEditText.getText().toString()).apply();
+        SharedPreferences prefs1 = getSharedPreferences("user_prefs1", MODE_PRIVATE);
+        prefs1.edit().putBoolean("isGuest", false).apply();
         startActivity(intent);
         finish();
     }
@@ -149,4 +173,6 @@ public class LoginView extends AppCompatActivity implements LoginViewInterface
             }
         }
     }
+
+
 }
